@@ -20,9 +20,26 @@ body {
     position: relative;
 }
 
+@keyframes block-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-1600px); }
+}
+
 .block {
     background-color: red;
-    position: absolute;
+    position: relative;
+    top: 350px;
+    left: 1550px;
+    animation: block-scroll 3s linear infinite;
+}
+
+@keyframes player-jump {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-200px); }
+}
+
+.jump {
+    animation: 0.8s linear alternate 2 player-jump
 }
 
 .player {
@@ -31,4 +48,5 @@ body {
     background-color: green;
     position: absolute;
     left: 200px;
+    top: 300px;
 }
