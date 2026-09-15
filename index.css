@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+}
+.canvas-container {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.canvas {
+    width: 1500px;
+    height: 800px;
+    background-color: gray;
+    overflow: hidden;
+}
+
+.block {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    position: relative;
+    top: 350px;
+}
+.player {
+    width: 50px;
+    height: 50px;
+    background-color: green;
+    position: relative;
+    left: 200px;
+}
