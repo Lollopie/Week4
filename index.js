@@ -1,4 +1,5 @@
-const player = document.querySelector('.player');
+const playerWalking = document.querySelector('.player.walking'); 
+const playerJumping = document.querySelector('.player.jumping'); 
 const canvas = document.querySelector('.canvas');
 const canvasWidth = canvas.clientWidth;
 const jumpLengthInMillis = 1600;
@@ -8,10 +9,12 @@ let gameOver = false;
 
 function removeJump() {
     if (!gameOver) {
-        player.classList.remove('jump');
+        playerJumping.classList.remove('jump');
+        playerJumping.classList.add('hidden');
+        playerWalking.classList.remove('hidden');
         inJump = false;
         //Forces the browser to reflow reference:https://stackoverflow.com/a/63561659
-        player.offsetWidth;
+        playerWalking.offsetWidth;
     }
 }
 
@@ -23,7 +26,8 @@ function shouldGenerateNewObstacle(obstacleSpawnLikelihood) {
 
 function createObstacle(obstacleSpawnLikelihood) {
     if (shouldGenerateNewObstacle(obstacleSpawnLikelihood)) {
-        const obstacle = document.createElement('div');
+        const obstacle = document.createElement('img');
+        obstacle.setAttribute('src', 'public/singlebox.png')
         const width = 30 + Math.floor(Math.random() * 51);
         const height = 30 + Math.floor(Math.random() * 101);
         const left = canvasWidth;
@@ -32,7 +36,7 @@ function createObstacle(obstacleSpawnLikelihood) {
         obstacle.style.width = `${width}px`;
         obstacle.style.height = `${height}px`;
         obstacle.style.left = `${left}px`;
-        obstacle.style.top = `${350 - height}px`;
+        obstacle.style.top = `${750 - height}px`;
         canvas.appendChild(obstacle);
         obstacles.push(obstacle);
         setTimeout(()=>{
@@ -60,6 +64,7 @@ function isColliding(element1, element2) {
 
 function checkCollision() {
     for (let i = 0; i < obstacles.length; i++) {
+        const player = inJump ? playerJumping : playerWalking;
         if (isColliding(obstacles[i], player)) {
             return true;
         }
@@ -80,7 +85,8 @@ function performGameTick(tick = 0) {
         obstacles.forEach((obstacle) => {
             obstacle.classList.add('paused');
         });
-        player.classList.add('paused');
+        playerJumping.classList.add('paused');
+        playerWalking.classList.add('paused');
     }
     if (tick >= nextObstacleTick) {
         const obstacle = createObstacle(obstacleSpawnLikelihood);
@@ -104,7 +110,9 @@ addEventListener('keydown', (e) => {
         if (!inJump && !gameOver) {
             e.preventDefault();
             inJump = true;
-            player.classList.add('jump');
+            playerJumping.classList.add('jump');
+            playerJumping.classList.remove('hidden');
+            playerWalking.classList.add('hidden');
             setTimeout(removeJump, jumpLengthInMillis);
         }
     }
