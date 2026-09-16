@@ -22,17 +22,17 @@ body {
     position: relative;
 }
 
-/* @keyframes block-scroll {
+@keyframes block-scroll {
     from { transform: translateX(0); }
     to { transform: translateX(-1600px); }
-} */
+}
 
 .block {
     background-color: red;
     position: absolute;
     top: 350px;
     left: 1550px;
-    /* animation: block-scroll 3s linear infinite; */
+    animation: block-scroll 3s linear infinite;
 }
 
 @keyframes player-jump {
@@ -41,7 +41,11 @@ body {
 }
 
 .jump {
-    animation: 0.8s linear alternate 2 player-jump
+    animation: 0.8s linear alternate 2 player-jump;
+}
+
+.paused {
+    animation-play-state: paused;
 }
 
 .player {
