@@ -99,8 +99,8 @@ let removeJumpTick = Infinity;
 let tick = 0;
 
 function performGameTick() {
-    const isColliding = checkCollision();
-    if (isColliding) {
+    const hasCollided = checkCollision();
+    if (hasCollided) {
         console.log('Game over');
         gameOver = true;
         finalScore.textContent = scoreField.textContent.split(': ')[1];
