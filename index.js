@@ -1,7 +1,14 @@
 const canvas = document.querySelector('.canvas');
+const menu = document.querySelector('.menu');
 const playerWalking = canvas.querySelector('.player.walking');
 const playerJumping = canvas.querySelector('.player.jumping');
 const scoreField = canvas.querySelector('.score');
+const musicVolumeNumber = document.querySelector('#music-volume-number');
+const sfxVolumeNumber = document.querySelector('#sfx-volume-number');
+const music = document.querySelector('.background-music');
+music.volume = 0.3;
+const sfx = document.querySelector('.sfx');
+sfx.volume = 0.3;
 const canvasWidth = canvas.clientWidth;
 const jumpLengthInTicks = 60;
 const obstacleAnimationInTicks = 150;
@@ -11,8 +18,6 @@ let drawingHitboxes = false;
 let isPaused = false;
 const gameOverCard = canvas.querySelector('.game-over.game-card');
 const finalScore = gameOverCard.querySelector('.final-score');
-const pauseCard = canvas.querySelector('.pause.game-card');
-const restartButton = canvas.querySelector('.restart-button');
 
 function removeJump() {
     if (!gameOver) {
@@ -59,7 +64,7 @@ function createObstacle(obstacleSpawnLikelihood) {
         const obstacleType =
             obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
 
-        obstacle.setAttribute('src', 'public/singlebox.png')
+        obstacle.setAttribute('src', 'public/images/singlebox.png')
         const width = 30 + Math.floor(Math.random() * 51);
         const height = 30 + Math.floor(Math.random() * 101);
 
@@ -95,10 +100,6 @@ function checkCollision() {
     }
     return false;
 }
-restartButton.addEventListener('click', () => {
-    resetGame();
-});
-
 const obstacleSpawnBaseLikelihood = 80;
 let obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
 const minTicksToNextObstacle = 100;
@@ -142,6 +143,21 @@ function performGameTick() {
     }
 }
 
+function togglePause() {
+    if(!gameOver) {
+        isPaused = !isPaused;
+        obstacles.forEach((obstacle) => {
+            obstacle.classList.toggle('paused');
+        });
+        playerJumping.classList.toggle('paused');
+        playerWalking.classList.toggle('paused');
+        menu.classList.toggle('hidden');
+        if (!isPaused) {
+            performGameTick();
+        }
+    }
+}
+
 function startGame() {
     performGameTick();
 }
@@ -159,7 +175,7 @@ function resetGame() {
     isPaused = false;
     scoreField.textContent = 'Score: 0';
     gameOverCard.classList.add('hidden');
-    pauseCard.classList.add('hidden');
+    menu.classList.add('hidden');
     playerJumping.classList.remove('jump', 'paused');
     playerJumping.classList.add('hidden');
     playerWalking.classList.remove('hidden', 'paused');
@@ -167,6 +183,13 @@ function resetGame() {
 }
 
 startGame();
+
+const resumeButton = document.querySelector('.resume-button');
+resumeButton.addEventListener('click', () => togglePause());
+const menuRestartButton = document.querySelector('.menu-button.restart-button');
+menuRestartButton.addEventListener('click', () => resetGame());
+const gameOverRestartButton = document.querySelector('.restart-button');
+gameOverRestartButton.addEventListener('click', () => resetGame());
 
 addEventListener('keydown', (e) => {
     if (e.key === " ") {
@@ -186,18 +209,39 @@ addEventListener('keydown', (e) => {
         obstacles.forEach((obstacle) => obstacle.classList.toggle('drawHitbox'));
     }
     else if (e.key === 'Escape') {
-        if (!gameOver) {
-            isPaused = !isPaused;
-            obstacles.forEach((obstacle) => {
-                obstacle.classList.toggle('paused');
-            });
-            playerJumping.classList.toggle('paused');
-            playerWalking.classList.toggle('paused');
-            pauseCard.classList.toggle('hidden');
-            if (!isPaused) {
-                pauseCard.classList.add('hidden');
-                performGameTick();
-            }
-        }
+        togglePause();
     }
 })
+
+const musicVolume = document.querySelector("#music-volume");
+const sfxVolume = document.querySelector('#sfx-volume');
+const activeColor = "#6D7D76";
+const inactiveColor = "#2C363F";
+
+function adjustVolume(volumeRange, volumeNumber, audioElement) {
+    const ratio = Math.floor((volumeRange.value - volumeRange.min) / (volumeRange.max - volumeRange.min) * 100);
+    volumeRange.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+    volumeNumber.textContent = `${ratio}%`;
+    volumeNumber.style.left = `${ratio}%`;
+    audioElement.volume = ratio / 100;
+}
+
+musicVolume.addEventListener("input", function(){
+    adjustVolume(musicVolume, musicVolumeNumber, music);
+});
+
+sfxVolume.addEventListener("input", function(){
+    adjustVolume(sfxVolume, sfxVolumeNumber, sfx);
+});
+
+
+const songOptions = [...document.querySelectorAll('.bg-music')];
+songOptions.forEach((songOption) => {songOption.addEventListener("click", function() {
+    const songName = this.textContent.slice(4);
+    music.setAttribute('src', `public/music/${songName}.mp3`);
+    const activeSongOption = songOptions.filter((songOption) => songOption.textContent[1] === 'x')[0];
+    activeSongOption.classList.remove('bg-music-active');
+    activeSongOption.textContent = '[ ]' + activeSongOption.textContent.slice(3); 
+    songOption.classList.add('bg-music-active');
+    songOption.textContent = '[x]' + songOption.textContent.slice(3); 
+})});

@@ -7,6 +7,8 @@
     <title>Document</title>
     <script defer src="index.js"></script>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 
 <body>
@@ -20,15 +22,49 @@
                 <p>Your score: <span class="final-score">0</span></p>
                 <button class="restart-button">Play again</button>
             </div>
-
-            <div class=" pause game-card hidden">
-                <h1>Game is Paused</h1>
-                <p>Press 'Esc' to resume</p>
-            </div>
-            <img src="public/background.jpg" class="background">
-            <img src="public/cat_walking.png" class="player walking">
-            <img src="public/cat_jumping.png" class="player jumping hidden">
+            <img src="public/images/background.jpg" class="background">
+            <img src="public/images/cat_walking.png" class="player walking">
+            <img src="public/images/cat_jumping.png" class="player jumping hidden">
         </div>
+    </div>
+    <div class="menu hidden">
+        <h1>PAUSE</h1>
+        <h2 class="menu-header">BACKGROUND MUSIC SELECTOR</h2>
+        <div class="bg-music-container">
+            <div class="bg-music bg-music-active">[x] CAT CHASE</div>
+            <div class="bg-music">[ ] CRATE CONGA</div>
+        </div>
+        <div class="volume-container">
+            <h2 class="menu-header">SOUND LEVELS</h2>
+            <audio autoplay src="public/music/CAT CHASE.mp3" class="background-music"></audio>
+            <audio src="public/music/CAT CHASE.mp3" class="sfx"></audio>
+            <div class="volume-indicator">
+                <label for="volume" class="menu-label">Music Volume:</label>
+                <output id="music-volume-number">
+                    30%
+                </output>
+            </div>
+            <div class="volume-bar-container">
+                <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
+                <input type="range" id="music-volume" name="volume" class="volume" value="30" min="0" max="100">
+                <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
+            </div>
+            <div class="volume-indicator">
+                <label for="volume" class="menu-label">SFX Volume:</label>
+                <output id="sfx-volume-number">
+                    30%
+                </output>
+            </div>
+            <div class="volume-bar-container">
+                <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
+                <input type="range" id="sfx-volume" name="volume" class="volume" value="30" min="0" max="100">
+                <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
+            </div>
+        </div>
+        <section class="menu-button-container">
+            <button class="menu-button resume-button">RESUME</button>
+            <button class="menu-button restart-button">RESTART</button>
+        </section>
     </div>
 </body>
 

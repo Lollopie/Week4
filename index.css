@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'PressStart2P';
+    src: url("./public/fonts/PressStart2P-Regular.ttf") format("truetype");
+}
+
 body {
     margin: 0;
     overflow: hidden;
@@ -27,6 +32,8 @@ body {
     left: 5vw;
     color:orange;
     font-size: xx-large;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .background {
@@ -36,7 +43,7 @@ body {
 
 @keyframes block-scroll {
     from { transform: translateX(0); }
-    to {     transform: translateX(calc(-100vw - 100%)); }
+    to {transform: translateX(calc(-100vw - 100%)); }
 }
 
 .block {
@@ -70,6 +77,37 @@ body {
   display: block;
 }
 
+.menu { 
+    z-index: 1;
+    position: absolute;
+
+    top: 27vh;
+    left: 40vw;
+    width: 20vw;
+    height: 46vh;
+
+    background: #2B3238;
+    border: 5px double #959DA0;
+    border-radius: 8px;
+
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    align-items: center;
+    
+    font-family: 'PressStart2p';
+    color: #DBD7BE;
+
+    overflow: scroll;
+}
+
+.menu > h1 {
+    margin: 0;
+    text-align: center;
+    text-shadow: 1px 1px 10px black;
+}
+
 .hidden {
     display: none;
 }
@@ -98,17 +136,126 @@ body {
     color: orange;
 }
 
-.restart-button{
-    background-color: orange;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
+.volume {
+  appearance: none;
+  width: 75%;
+  height: 12px;
+  border: 2px solid #A7ADB0;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #6D7D76 30%, #2C363F 30%);
+  cursor: pointer;
+  padding-top: 5px;
 }
 
-.restart-button:hover {
-    background-color: darkorange;
+.volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 35px;
+  height: 35px;
+  border: 2px solid #333333;
+  border-radius: 10px;
+  background: #8D9B9E;
+  box-shadow: none;
+}
+
+.volume::-moz-range-thumb {
+  width: 35px;
+  height: 35px;
+  border: 2px solid #333333;
+  border-radius: 10px;
+  background: #8D9B9E;
+  box-shadow: none;
+}
+
+.volume-bar-container {
+    display:flex;
+    align-items: end;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.track-selector {
+    margin-top: 5px;
+    border-radius: 5px;
+    border: black solid 2px;
+    width: 10vw;
+    height: 45px;
+}
+
+.volume-indicator {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.menu-header {
+    text-align: center;
+    font-size: small;
+}
+
+.bg-music-container {
+    width: 80%;
+    border: #959DA0 5px double;
+    padding: 10px;
+}
+
+.bg-music-active {
+    background-color: #555C51;
+}
+
+.bg-music:hover {
+    background-color: #555C51;
+    opacity: 0.7;
+}
+
+.bg-music {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.volume-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fa-solid {
+    padding-bottom: 12px;
+}
+
+.menu-button-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.menu-button {
+    width: 150px;
+    height: 50px;
+    font-size: large;
+    font-family: 'PressStart2P';
+    color: #DBD7BE;
+    border: 5px ridge #959DA0;
+    border-radius: 8px;
+}
+
+.menu-button:hover {
+    border: 5px groove #959DA0;
+}
+
+.resume-button {
+    background-color: #68816C;
+}
+
+.restart-button {
+    background-color: #81444B;
+}
+
+img {
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
