@@ -25,7 +25,6 @@ function removeJump() {
         playerJumping.classList.add('hidden');
         playerWalking.classList.remove('hidden');
         inJump = false;
-        //Forces the browser to reflow reference:https://stackoverflow.com/a/63561659
         playerWalking.offsetWidth;
     }
 }
@@ -52,25 +51,17 @@ function shouldGenerateNewObstacle(obstacleSpawnLikelihood) {
     return Math.floor(Math.random() * Math.pow(2, obstacleSpawnLikelihood)) === 0;
 }
 
-const obstacleTypes = [
-    { width: 50, height: 50 },
-    { width: 90, height: 50 },
-    { width: 50, height: 100 }
-];
-
 function createObstacle(obstacleSpawnLikelihood) {
     if (shouldGenerateNewObstacle(obstacleSpawnLikelihood)) {
         const obstacle = document.createElement('img');
-        const obstacleType =
-            obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
-
-        obstacle.setAttribute('src', 'public/images/singlebox.png')
         const width = 30 + Math.floor(Math.random() * 51);
         const height = 30 + Math.floor(Math.random() * 101);
 
+        obstacle.setAttribute('src', 'public/images/singlebox.png')
+
         obstacle.className = 'block' + (drawingHitboxes ? " drawHitbox" : "");
-        obstacle.style.width = `${obstacleType.width}px`;
-        obstacle.style.height = `${obstacleType.height}px`;
+        obstacle.style.width = `${width}px`;
+        obstacle.style.height = `${height}px`;
         canvas.appendChild(obstacle);
         obstacles.push(obstacle);
         removeObstacleTicks.push(tick + obstacleAnimationInTicks);
@@ -144,7 +135,7 @@ function performGameTick() {
 }
 
 function togglePause() {
-    if(!gameOver) {
+    if (!gameOver) {
         isPaused = !isPaused;
         obstacles.forEach((obstacle) => {
             obstacle.classList.toggle('paused');
@@ -226,22 +217,23 @@ function adjustVolume(volumeRange, volumeNumber, audioElement) {
     audioElement.volume = ratio / 100;
 }
 
-musicVolume.addEventListener("input", function(){
+musicVolume.addEventListener("input", function () {
     adjustVolume(musicVolume, musicVolumeNumber, music);
 });
 
-sfxVolume.addEventListener("input", function(){
+sfxVolume.addEventListener("input", function () {
     adjustVolume(sfxVolume, sfxVolumeNumber, sfx);
 });
 
-
 const songOptions = [...document.querySelectorAll('.bg-music')];
-songOptions.forEach((songOption) => {songOption.addEventListener("click", function() {
-    const songName = this.textContent.slice(4);
-    music.setAttribute('src', `public/music/${songName}.mp3`);
-    const activeSongOption = songOptions.filter((songOption) => songOption.textContent[1] === 'x')[0];
-    activeSongOption.classList.remove('bg-music-active');
-    activeSongOption.textContent = '[ ]' + activeSongOption.textContent.slice(3); 
-    songOption.classList.add('bg-music-active');
-    songOption.textContent = '[x]' + songOption.textContent.slice(3); 
-})});
+songOptions.forEach((songOption) => {
+    songOption.addEventListener("click", function () {
+        const songName = this.textContent.slice(4);
+        music.setAttribute('src', `public/music/${songName}.mp3`);
+        const activeSongOption = songOptions.filter((songOption) => songOption.textContent[1] === 'x')[0];
+        activeSongOption.classList.remove('bg-music-active');
+        activeSongOption.textContent = '[ ]' + activeSongOption.textContent.slice(3);
+        songOption.classList.add('bg-music-active');
+        songOption.textContent = '[x]' + songOption.textContent.slice(3);
+    })
+});
