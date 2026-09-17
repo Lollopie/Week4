@@ -1,11 +1,14 @@
-const playerWalking = document.querySelector('.player.walking'); 
-const playerJumping = document.querySelector('.player.jumping'); 
 const canvas = document.querySelector('.canvas');
+const playerWalking = canvas.querySelector('.player.walking'); 
+const playerJumping = canvas.querySelector('.player.jumping'); 
+const scoreField = canvas.querySelector('.score');
 const canvasWidth = canvas.clientWidth;
-const jumpLengthInMillis = 1600;
-const obstacleAnimationInMillis = 3000;
+const jumpLengthInTicks = 160;
+const obstacleAnimationInTicks = 290;
 let inJump = false;
 let gameOver = false;
+let drawingHitboxes = false;
+let isPaused = false;
 
 function removeJump() {
     if (!gameOver) {
@@ -18,8 +21,20 @@ function removeJump() {
     }
 }
 
-let obstacles = [];
+function removeObstacle() {
+    while (tick >= removeObstacleTicks[0]) {
+        removeObstacleTicks.shift();
+        canvas.removeChild(obstacles.shift());
+    }
+}
 
+function incrementScore() {
+    const currentScore = parseInt(scoreField.textContent.split(': ')[1]);
+    scoreField.textContent = 'Score: ' + (currentScore + 1);
+}
+
+let obstacles = [];
+let removeObstacleTicks = [];
 function shouldGenerateNewObstacle(obstacleSpawnLikelihood) {
     return Math.floor(Math.random() * Math.pow(2, obstacleSpawnLikelihood)) === 0;
 }
@@ -30,21 +45,13 @@ function createObstacle(obstacleSpawnLikelihood) {
         obstacle.setAttribute('src', 'public/singlebox.png')
         const width = 30 + Math.floor(Math.random() * 51);
         const height = 30 + Math.floor(Math.random() * 101);
-        const left = canvasWidth;
 
-        obstacle.className = 'block';
+        obstacle.className = 'block' + (drawingHitboxes ? " drawHitbox" : "");
         obstacle.style.width = `${width}px`;
         obstacle.style.height = `${height}px`;
-        obstacle.style.left = `${left}px`;
-        obstacle.style.top = `${750 - height}px`;
         canvas.appendChild(obstacle);
         obstacles.push(obstacle);
-        setTimeout(()=>{
-            if(!gameOver) {
-                canvas.removeChild(obstacle);
-                obstacles = obstacles.filter((obstacleX) => obstacleX != obstacle);
-            }
-        }, obstacleAnimationInMillis);
+        removeObstacleTicks.push(tick + obstacleAnimationInTicks);
         return obstacle;
     }
     return null;
@@ -76,8 +83,10 @@ const obstacleSpawnBaseLikelihood = 80;
 let obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
 const minTicksToNextObstacle = 100;
 let nextObstacleTick = 0;
+let removeJumpTick = 0;
+let tick = 0;
 
-function performGameTick(tick = 0) {
+function performGameTick() {
     const isColliding = checkCollision();
     if (isColliding) {
         console.log('Game over');
@@ -98,8 +107,16 @@ function performGameTick(tick = 0) {
             nextObstacleTick = tick + minTicksToNextObstacle;
         }
     }
-    if (!gameOver) {
-        setTimeout(() => performGameTick(tick + 1), 10);
+    if (tick >= removeJumpTick) {
+        removeJump();
+        removeJumpTick = Infinity;
+    }
+    if (tick >= removeObstacleTicks[0]) {
+        removeObstacle();
+    }
+    if (!gameOver && !isPaused) {
+        tick += 1;
+        setTimeout(performGameTick, 10);
     }
 }
 
@@ -113,7 +130,26 @@ addEventListener('keydown', (e) => {
             playerJumping.classList.add('jump');
             playerJumping.classList.remove('hidden');
             playerWalking.classList.add('hidden');
-            setTimeout(removeJump, jumpLengthInMillis);
+            removeJumpTick = tick + jumpLengthInTicks;
+        }
+    }
+    else if (e.key === "h") {
+        drawingHitboxes = !drawingHitboxes;
+        playerJumping.classList.toggle('drawHitbox');
+        playerWalking.classList.toggle('drawHitbox');
+        obstacles.forEach((obstacle) => obstacle.classList.toggle('drawHitbox'));
+    }
+    else if (e.key === 'Escape') {
+        if(!gameOver) {
+            isPaused = !isPaused;
+            obstacles.forEach((obstacle) => {
+                obstacle.classList.toggle('paused');
+            });
+            playerJumping.classList.toggle('paused');
+            playerWalking.classList.toggle('paused');
+            if (!isPaused) {
+                performGameTick();
+            }
         }
     }
 })
