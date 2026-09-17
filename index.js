@@ -95,7 +95,7 @@ const obstacleSpawnBaseLikelihood = 80;
 let obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
 const minTicksToNextObstacle = 100;
 let nextObstacleTick = 0;
-let removeJumpTick = 0;
+let removeJumpTick = Infinity;
 let tick = 0;
 
 function performGameTick() {
