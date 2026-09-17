@@ -11,7 +11,7 @@ body {
 .canvas-container {
     margin: 0;
     padding: 0;
-  
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,7 +30,7 @@ body {
     position: absolute;
     top: 5vh;
     left: 5vw;
-    color:orange;
+    color: orange;
     font-size: xx-large;
     -webkit-user-select: none;
     user-select: none;
@@ -42,8 +42,13 @@ body {
 }
 
 @keyframes block-scroll {
-    from { transform: translateX(0); }
-    to {transform: translateX(calc(-100vw - 100%)); }
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(calc(-100vw - 100%));
+    }
 }
 
 .block {
@@ -54,13 +59,21 @@ body {
 }
 
 @keyframes player-jump {
-  0% { transform: translateY(0); }
-  45% { transform: translateY(-30vh); }
-  100% { transform: translateY(0); }
+    0% {
+        transform: translateY(0);
+    }
+
+    45% {
+        transform: translateY(-30vh);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
 .jump {
-  animation: player-jump 600ms ease-in-out;
+    animation: player-jump 600ms ease-in-out;
 }
 
 .paused {
@@ -68,16 +81,16 @@ body {
 }
 
 .player {
-  width: 150px;
-  height: auto;
-  position: absolute;
-  left: 10vw;
-  bottom: 10vh;
-  top: auto;
-  display: block;
+    width: 150px;
+    height: auto;
+    position: absolute;
+    left: 10vw;
+    bottom: 10vh;
+    top: auto;
+    display: block;
 }
 
-.menu { 
+.menu {
     z-index: 1;
     position: absolute;
 
@@ -90,19 +103,19 @@ body {
     border: 5px double #959DA0;
     border-radius: 8px;
 
-    display:flex;
+    display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 20px;
     align-items: center;
-    
+
     font-family: 'PressStart2p';
     color: #DBD7BE;
 
     overflow: scroll;
 }
 
-.menu > h1 {
+.menu>h1 {
     margin: 0;
     text-align: center;
     text-shadow: 1px 1px 10px black;
@@ -136,39 +149,54 @@ body {
     color: orange;
 }
 
+.restart-button {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.restart-button:hover {
+    background-color: darkorange;
+}
+
 .volume {
-  appearance: none;
-  width: 75%;
-  height: 12px;
-  border: 2px solid #A7ADB0;
-  border-radius: 7px;
-  background: linear-gradient(90deg, #6D7D76 30%, #2C363F 30%);
-  cursor: pointer;
-  padding-top: 5px;
+    appearance: none;
+    width: 75%;
+    height: 12px;
+    border: 2px solid #A7ADB0;
+    border-radius: 7px;
+    background: linear-gradient(90deg, #6D7D76 30%, #2C363F 30%);
+    cursor: pointer;
+    padding-top: 5px;
 }
 
 .volume::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 35px;
-  height: 35px;
-  border: 2px solid #333333;
-  border-radius: 10px;
-  background: #8D9B9E;
-  box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 35px;
+    height: 35px;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    background: #8D9B9E;
+    box-shadow: none;
 }
 
 .volume::-moz-range-thumb {
-  width: 35px;
-  height: 35px;
-  border: 2px solid #333333;
-  border-radius: 10px;
-  background: #8D9B9E;
-  box-shadow: none;
+    width: 35px;
+    height: 35px;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    background: #8D9B9E;
+    box-shadow: none;
 }
 
 .volume-bar-container {
-    display:flex;
+    display: flex;
     align-items: end;
     justify-content: space-between;
     margin-top: 10px;
