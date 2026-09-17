@@ -184,7 +184,7 @@ gameOverRestartButton.addEventListener('click', () => resetGame());
 
 addEventListener('keydown', (e) => {
     if (e.key === " ") {
-        if (!inJump && !gameOver) {
+        if (!inJump && !gameOver && !isPaused) {
             e.preventDefault();
             inJump = true;
             playerJumping.classList.add('jump');
