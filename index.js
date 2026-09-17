@@ -47,21 +47,27 @@ function incrementScore() {
 
 let obstacles = [];
 let removeObstacleTicks = [];
+
 function shouldGenerateNewObstacle(obstacleSpawnLikelihood) {
     return Math.floor(Math.random() * Math.pow(2, obstacleSpawnLikelihood)) === 0;
 }
 
+const obstacleTypes = [
+    { width: 50, height: 50 },
+    { width: 90, height: 50 },
+    { width: 50, height: 100 }
+];
+
 function createObstacle(obstacleSpawnLikelihood) {
     if (shouldGenerateNewObstacle(obstacleSpawnLikelihood)) {
         const obstacle = document.createElement('img');
-        const width = 30 + Math.floor(Math.random() * 51);
-        const height = 30 + Math.floor(Math.random() * 101);
-
+        const obstacleType =
+            obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
         obstacle.setAttribute('src', 'public/images/singlebox.png')
 
         obstacle.className = 'block' + (drawingHitboxes ? " drawHitbox" : "");
-        obstacle.style.width = `${width}px`;
-        obstacle.style.height = `${height}px`;
+        obstacle.style.width = `${obstacleType.width}px`;
+        obstacle.style.height = `${obstacleType.height}px`;
         canvas.appendChild(obstacle);
         obstacles.push(obstacle);
         removeObstacleTicks.push(tick + obstacleAnimationInTicks);
@@ -191,6 +197,8 @@ addEventListener('keydown', (e) => {
             playerJumping.classList.remove('hidden');
             playerWalking.classList.add('hidden');
             removeJumpTick = tick + jumpLengthInTicks;
+            sfx.setAttribute('src', 'public/music/jump.mp3');
+            sfx.play();
         }
     }
     else if (e.key === "h") {
