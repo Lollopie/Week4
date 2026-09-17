@@ -53,9 +53,9 @@ function shouldGenerateNewObstacle(obstacleSpawnLikelihood) {
 }
 
 const obstacleTypes = [
-    { width: 50, height: 50 },
-    { width: 90, height: 50 },
-    { width: 50, height: 100 }
+    { width: 50, height: 50, image: 'singlebox.png' },
+    { width: 90, height: 50, image: 'widebox.png' },
+    { width: 50, height: 100, image: 'tallbox.png' }
 ];
 
 function createObstacle(obstacleSpawnLikelihood) {
@@ -63,7 +63,7 @@ function createObstacle(obstacleSpawnLikelihood) {
         const obstacle = document.createElement('img');
         const obstacleType =
             obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
-        obstacle.setAttribute('src', 'public/images/singlebox.png')
+        obstacle.setAttribute('src', `public/images/${obstacleType.image}`);
 
         obstacle.className = 'block' + (drawingHitboxes ? " drawHitbox" : "");
         obstacle.style.width = `${obstacleType.width}px`;
