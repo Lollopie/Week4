@@ -192,6 +192,7 @@ function resetGame() {
     isPaused = false;
 
     scoreField.textContent = 'Score: 0';
+    scoreField.classList.remove('hidden');
     gameOverCard.classList.add('hidden');
     menu.classList.add('hidden');
     playerJumping.classList.remove('jump', 'paused');
@@ -215,6 +216,7 @@ function returnToMainMenu() {
 
     mainMenuContainer.classList.remove('hidden');
     isMainMenuOpen = true;
+    scoreField.classList.add('hidden');
 }
 
 const playButton = document.querySelector('.play-button');

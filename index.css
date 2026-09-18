@@ -351,8 +351,9 @@ img {
 }
 
 .main-menu-button {
-    width: 200px;
+    width: 260px;
     height: 60px;
+    font-size: 13px;
     line-height: 1.6;
     background-color: #555C51;
 }
