@@ -212,12 +212,19 @@ body {
     width: 80%;
     border: #959DA0 5px double;
     padding: 10px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .bg-music {
     -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
+
+    padding: 8px 10px;
+    line-height: 1.5;
 }
 
 .bg-music-active {
@@ -351,9 +358,9 @@ img {
 }
 
 .main-menu-button {
-    width: 260px;
+    width: 220px;
     height: 60px;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
     background-color: #555C51;
 }
@@ -368,8 +375,8 @@ img {
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 15px;
+    padding: 15px;
     align-items: center;
 
     font-family: 'PressStart2P', serif;
