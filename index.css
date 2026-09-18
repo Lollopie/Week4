@@ -118,10 +118,10 @@ body {
     padding: 20px;
     align-items: center;
 
-    font-family: 'PressStart2p', serif;
+    font-family: 'PressStart2P', serif;
     color: #DBD7BE;
 
-    overflow: scroll;
+    overflow: auto;
 }
 
 .menu>h1 {
@@ -177,19 +177,10 @@ body {
     margin-bottom: 10px;
 }
 
-.track-selector {
-    margin-top: 5px;
-    border-radius: 5px;
-    border: black solid 2px;
-    width: 10vw;
-    height: 45px;
-}
-
 .volume-indicator {
     display: flex;
     justify-content: space-between;
 }
-
 
 .menu-header {
     text-align: center;
@@ -202,6 +193,12 @@ body {
     padding: 10px;
 }
 
+.bg-music {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
 .bg-music-active {
     background-color: #555C51;
 }
@@ -209,11 +206,6 @@ body {
 .bg-music:hover {
     background-color: #555C51;
     opacity: 0.7;
-}
-
-.bg-music {
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 .volume-container {
@@ -242,6 +234,7 @@ body {
     color: #DBD7BE;
     border: 5px ridge #959DA0;
     border-radius: 8px;
+    cursor: pointer;
 }
 
 .menu-button:hover {
@@ -270,12 +263,13 @@ img {
     color: #7F2524;
 }
 
-.game-over-image { 
-    width: 80%; height: auto; 
+.game-over-image {
+    width: 80%;
+    height: auto;
 }
 
 .rainbow_text_animated {
-    background: radial-gradient(circle at 100%, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+    background: radial-gradient(circle at 100%, #6666ff, #0099ff, #00ff00, #ff3399, #6666ff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -284,9 +278,9 @@ img {
 }
 
 @keyframes rainbow_animation {
-  to {
-    background-position: 200% center;
-  }
+    to {
+        background-position: 200% center;
+    }
 }
 
 .muted {
@@ -304,33 +298,33 @@ img {
 
 .main-menu {
     display: flex;
-    flex: column;
+    flex-direction: column;
     justify-content: center;
 
     width: 100%;
     height: 100%;
 
-    font-family: 'PressStart2P', sarif;
+    font-family: 'PressStart2P', serif;
     position: relative;
 }
 
-.main-menu>h1{
+.main-menu>h1 {
     color: orange;
     position: absolute;
 }
 
-.main-menu-button{
+.main-menu-button {
     width: 200px;
     height: 60px;
     background-color: #555C51;
 }
 
-.main-menu-button-container{
+.main-menu-button-container {
     position: absolute;
     top: 200px;
     left: 50px;
 
-    background: rgb(43 50 56 0.5);
+    background: rgb(43 50 56 / 0.5);
     border: 5px double #959DA0;
     border-radius: 8px;
     display: flex;
@@ -339,10 +333,10 @@ img {
     padding: 20px;
     align-items: center;
 
-    font-family: 'PressStart2p', serif;
+    font-family: 'PressStart2P', serif;
     color: #DBD7BE;
 
-    overflow: scroll;
+    overflow: auto;
 }
 
 .play-button {
@@ -353,22 +347,24 @@ img {
     position: absolute;
     bottom: 10vh;
     left: 100px;
+    cursor: pointer;
 }
 
 .settings-menu-exit-button {
     background-color: #81444B;
 }
 
-.settings-menu, .htp-menu { 
-    z-index: 200; 
+.settings-menu,
+.htp-menu {
+    z-index: 200;
 }
 
 .htp-menu>.menu {
     width: 500px;
     height: 400px;
-    overflow: scroll;
+    overflow: auto;
     gap: 10px;
-} 
+}
 
 .htp-graphic {
     width: 200px;
@@ -376,7 +372,7 @@ img {
     position: relative;
 }
 
-.htp-graphic>.htp-cat-walking{
+.htp-graphic>.htp-cat-walking {
     width: 100px;
     height: 50px;
     position: absolute;
@@ -384,18 +380,23 @@ img {
     left: 20px;
 }
 
-.htp-graphic>.htp-cat-walking>img{
+.htp-graphic>.htp-cat-walking>img {
     width: 100%;
     height: 100%;
 }
 
-.htp-graphic>.htp-cat-jumping{
+.htp-graphic>.htp-cat-jumping {
     width: 100px;
     height: 50px;
     position: absolute;
     bottom: 150px;
     left: 160px;
-}   
+}
+
+.htp-graphic>.htp-cat-jumping>img {
+    width: 100%;
+    height: 100%;
+}
 
 .htp-graphic>#jumpArc {
     --a: 72deg;
@@ -409,19 +410,14 @@ img {
     border-color: #555C51;
     mask:
         linear-gradient(#0000 0 0) content-box intersect,
-        conic-gradient(#000 var(--a),#0000 0);
+        conic-gradient(#000 var(--a), #0000 0);
 
     position: relative;
     top: 20px;
     left: 35px;
 }
 
-.htp-graphic>.htp-cat-jumping>img{
-    width: 100%;
-    height: 100%;
-}
-
-.htp-graphic>.htp-box{
+.htp-graphic>.htp-box {
     width: 50px;
     height: 50px;
     position: absolute;
@@ -429,28 +425,35 @@ img {
     left: 150px;
 }
 
-.htp-graphic>.htp-box>img{
+.htp-graphic>.htp-box>img {
     width: 100%;
     height: 100%;
 }
 
-.htp-graphic>.htp-space{
+.htp-graphic>.htp-space {
     width: 200px;
     height: 35px;
     position: absolute;
     bottom: 0px;
     left: 10px;
-    font-family: 'PressStart2P', sans-serif;
-    
-    border: 5px #68816C outset;
-}
+    box-sizing: border-box;
 
-.htp-graphic>.htp-space:hover{
-    border: 5px #68816C inset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'PressStart2P', sans-serif;
+    font-size: small;
+    color: #000000;
+    background-color: #D9D9D9;
+    border: 5px #68816C outset;
+
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .htp-text {
-    position: relative; 
+    position: relative;
     width: 100%;
 }
 
