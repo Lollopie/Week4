@@ -14,7 +14,6 @@ const gameOverFinalScoreField = gameOverCard.querySelector('.game-over-final-sco
 const gameOverHighScoreField = gameOverCard.querySelector('.game-over-high-score');
 
 const jumpLengthInTicks = 60;
-const obstacleAnimationInTicks = 150;
 const obstacleSpawnBaseLikelihood = 80;
 const minTicksToNextObstacle = 100;
 
@@ -31,6 +30,7 @@ let nextObstacleTick = 0;
 let removeJumpTick = Infinity;
 let tick = 0;
 let tickTimer = null;
+let gameOverCardTimer = null;
 
 let highScoreValue = parseInt(localStorage.getItem('highScore')) || 0;
 highScore.textContent = highScoreValue;
@@ -51,8 +51,7 @@ function removeJump() {
 }
 
 function incrementScore() {
-    const currentScore = parseInt(scoreField.textContent.split(': ')[1]);
-    scoreField.textContent = 'Score: ' + (currentScore + 1);
+    scoreField.textContent = 'Score: ' + (getCurrentScore() + 1);
 }
 
 function removeObstacle() {
@@ -66,6 +65,19 @@ function removeObstacle() {
     }
 }
 
+function getCurrentScore() {
+    return parseInt(scoreField.textContent.split(': ')[1]);
+}
+
+function getObstacleDurationMs() {
+    const score = getCurrentScore();
+    if (score < 15) {
+        return 1500;
+    }
+    const steps = Math.floor((score - 15) / 15) + 1;
+    return Math.max(700, 1500 - steps * 150);
+}
+
 function shouldGenerateNewObstacle(likelihood) {
     return Math.floor(Math.random() * Math.pow(2, likelihood)) === 0;
 }
@@ -76,12 +88,15 @@ function createObstacle(likelihood) {
         const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
         obstacle.setAttribute('src', `public/images/${obstacleType.image}`);
 
+        const durationMs = getObstacleDurationMs();
+        obstacle.style.animationDuration = `${durationMs}ms`;
+
         obstacle.className = 'block' + (drawingHitboxes ? ' drawHitbox' : '');
         obstacle.style.width = `${obstacleType.width}px`;
         obstacle.style.height = `${obstacleType.height}px`;
         canvas.appendChild(obstacle);
         obstacles.push(obstacle);
-        removeObstacleTicks.push(tick + obstacleAnimationInTicks);
+        removeObstacleTicks.push(tick + durationMs / 10);
         return obstacle;
     }
     return null;
@@ -111,7 +126,7 @@ function handleGameOver() {
     clearTimeout(tickTimer);
     tickTimer = null;
 
-    const score = parseInt(scoreField.textContent.split(': ')[1]);
+    const score = getCurrentScore();
     finalScore.textContent = score;
 
     const isNewRecord = score > highScoreValue;
@@ -122,12 +137,15 @@ function handleGameOver() {
     }
     gameOverFinalScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
     gameOverHighScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
-
-    gameOverCard.classList.remove('hidden');
+    
     obstacles.forEach((obstacle) => obstacle.classList.add('paused'));
     playerJumping.classList.add('paused');
     playerWalking.classList.add('paused');
     canvas.classList.add('muted');
+
+    gameOverCardTimer = setTimeout(() => {
+        gameOverCard.classList.remove('hidden');
+    }, 700);
 }
 
 function performGameTick() {
@@ -140,7 +158,7 @@ function performGameTick() {
             obstacleSpawnLikelihood -= 1;
         } else {
             obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
-            nextObstacleTick = tick + minTicksToNextObstacle;
+            nextObstacleTick = tick + minTicksToNextObstacle * (getObstacleDurationMs() / 1500);
         }
     }
     if (tick >= removeJumpTick) {
@@ -184,6 +202,8 @@ function clearObstacles() {
 function resetGame() {
     clearTimeout(tickTimer);
     tickTimer = null;
+    clearTimeout(gameOverCardTimer);
+    gameOverCardTimer = null;
 
     clearObstacles();
     tick = 0;
@@ -210,6 +230,8 @@ function resetGame() {
 function returnToMainMenu() {
     clearTimeout(tickTimer);
     tickTimer = null;
+    clearTimeout(gameOverCardTimer);
+    gameOverCardTimer = null;
 
     clearObstacles();
     gameOver = false;
