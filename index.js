@@ -221,10 +221,9 @@ function returnToMainMenu() {
 
 const playButton = document.querySelector('.play-button');
 playButton.addEventListener('click', () => {
-    musicAudioElement.play().catch(() => {});
     mainMenuContainer.classList.add('hidden');
     isMainMenuOpen = false;
-    scoreField.classList.remove('hidden');      // ← add
+    scoreField.classList.remove('hidden');
     resetGame();
 });
 
@@ -279,6 +278,12 @@ howToPlayMenu
     .addEventListener('click', () => closeHowToPlayMenu());
 
 const sfxAudio = document.querySelector('.sfx');
+
+addEventListener('click', () => {
+    musicAudioElement.play().catch(() => {});
+}, { once: true });
+
+addEventListener('keydown', (e) => {
 
 addEventListener('keydown', (e) => {
     if (e.key === ' ') {
