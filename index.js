@@ -9,15 +9,17 @@ const music = document.querySelector('.background-music');
 music.volume = 0.3;
 const sfx = document.querySelector('.sfx');
 sfx.volume = 0.3;
-const canvasWidth = canvas.clientWidth;
 const jumpLengthInTicks = 60;
 const obstacleAnimationInTicks = 150;
 let inJump = false;
 let gameOver = false;
 let drawingHitboxes = false;
 let isPaused = false;
-const gameOverCard = canvas.querySelector('.game-over.game-card');
+const gameOverCard = document.querySelector('.menu.game-over');
 const finalScore = gameOverCard.querySelector('.final-score');
+const highScore = gameOverCard.querySelector('.high-score');
+const gameOverFinalScoreField = gameOverCard.querySelector('.game-over-final-score');
+const gameOverHighScoreField = gameOverCard.querySelector('.game-over-high-score');
 
 function removeJump() {
     if (!gameOver) {
@@ -104,18 +106,32 @@ let nextObstacleTick = 0;
 let removeJumpTick = Infinity;
 let tick = 0;
 
+function handleGameOver() {
+    console.log('Game over');
+    gameOver = true;
+    const score = parseInt(scoreField.textContent.split(': ')[1]);
+    finalScore.textContent = score;
+    if (score > highScore.textContent) {
+        gameOverFinalScoreField.classList.add('rainbow_text_animated');
+        gameOverHighScoreField.classList.add('rainbow_text_animated');
+        highScore.textContent = score;
+    } else {
+        gameOverFinalScoreField.classList.remove('rainbow_text_animated');
+        gameOverHighScoreField.classList.remove('rainbow_text_animated');
+    }
+    gameOverCard.classList.remove('hidden');
+    obstacles.forEach((obstacle) => {
+        obstacle.classList.add('paused');
+    });
+    playerJumping.classList.add('paused');
+    playerWalking.classList.add('paused');
+    canvas.classList.add('muted');
+}
+
 function performGameTick() {
     const hasCollided = checkCollision();
     if (hasCollided) {
-        console.log('Game over');
-        gameOver = true;
-        finalScore.textContent = scoreField.textContent.split(': ')[1];
-        gameOverCard.classList.remove('hidden');
-        obstacles.forEach((obstacle) => {
-            obstacle.classList.add('paused');
-        });
-        playerJumping.classList.add('paused');
-        playerWalking.classList.add('paused');
+        handleGameOver();
     }
     if (tick >= nextObstacleTick) {
         const obstacle = createObstacle(obstacleSpawnLikelihood);
@@ -148,6 +164,7 @@ function togglePause() {
         });
         playerJumping.classList.toggle('paused');
         playerWalking.classList.toggle('paused');
+        canvas.classList.toggle('muted');
         menu.classList.toggle('hidden');
         if (!isPaused) {
             performGameTick();
@@ -176,6 +193,7 @@ function resetGame() {
     playerJumping.classList.remove('jump', 'paused');
     playerJumping.classList.add('hidden');
     playerWalking.classList.remove('hidden', 'paused');
+    canvas.classList.remove('muted');
     startGame();
 }
 
@@ -185,7 +203,7 @@ const resumeButton = document.querySelector('.resume-button');
 resumeButton.addEventListener('click', () => togglePause());
 const menuRestartButton = document.querySelector('.menu-button.restart-button');
 menuRestartButton.addEventListener('click', () => resetGame());
-const gameOverRestartButton = document.querySelector('.restart-button');
+const gameOverRestartButton = gameOverCard.querySelector('.restart-button');
 gameOverRestartButton.addEventListener('click', () => resetGame());
 
 addEventListener('keydown', (e) => {
