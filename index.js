@@ -5,6 +5,7 @@ const menu = document.querySelector('.menu');
 const playerWalking = canvas.querySelector('.player.walking');
 const playerJumping = canvas.querySelector('.player.jumping');
 const scoreField = canvas.querySelector('.score');
+const gameAudio = canvas.querySelector('.game-audio');
 
 const gameOverCard = document.querySelector('.menu.game-over');
 const finalScore = gameOverCard.querySelector('.final-score');
@@ -193,6 +194,7 @@ function resetGame() {
 
     scoreField.textContent = 'Score: 0';
     scoreField.classList.remove('hidden');
+    gameAudio.classList.remove('hidden');
     gameOverCard.classList.add('hidden');
     menu.classList.add('hidden');
     playerJumping.classList.remove('jump', 'paused');
@@ -217,6 +219,7 @@ function returnToMainMenu() {
     mainMenuContainer.classList.remove('hidden');
     isMainMenuOpen = true;
     scoreField.classList.add('hidden');
+    gameAudio.classList.add('hidden');
 }
 
 const playButton = document.querySelector('.play-button');
@@ -224,6 +227,7 @@ playButton.addEventListener('click', () => {
     mainMenuContainer.classList.add('hidden');
     isMainMenuOpen = false;
     scoreField.classList.remove('hidden');
+    gameAudio.classList.remove('hidden');
     resetGame();
 });
 
