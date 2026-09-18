@@ -365,6 +365,13 @@ img {
         -2px 2px 0 #000;
 }
 
+.main-menu>.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
 .main-menu-button {
     width: 220px;
     height: 60px;
