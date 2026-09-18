@@ -270,6 +270,10 @@ img {
     color: #7F2524;
 }
 
+.game-over-image { 
+    width: 80%; height: auto; 
+}
+
 .rainbow_text_animated {
     background: radial-gradient(circle at 100%, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
     -webkit-background-clip: text;
@@ -353,6 +357,10 @@ img {
 
 .settings-menu-exit-button {
     background-color: #81444B;
+}
+
+.settings-menu, .htp-menu { 
+    z-index: 200; 
 }
 
 .htp-menu>.menu {

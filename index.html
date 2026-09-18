@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="index.css">
-    <link rel="icon" type="image/x-icon" href="public/favicon.png">
+    <link rel="icon" type="image/png" href="public/favicon.png">
 </head>
 
 <body>
+    <audio loop src="public/music/CAT_CHASE.mp3" class="background-music"></audio>
+    <audio src="public/music/jump.mp3" class="sfx"></audio>
     <div class="canvas-container">
         <div class="canvas">
             <div class="score">
@@ -34,8 +36,6 @@
             </div>
             <div class="volume-container">
                 <h2 class="menu-header">SOUND LEVELS</h2>
-                <audio autoplay loop src="public/music/CAT CHASE.mp3" class="background-music"></audio>
-                <audio src="public/music/jump.mp3" class="sfx"></audio>
                 <div class="volume-indicator">
                     <label for="pause-music-volume" class="menu-label">Music Volume:</label>
                     <output id="pause-music-volume-number">
@@ -66,7 +66,7 @@
         </div>
         <div class="menu game-over hidden">
             <h1>GAME OVER</h1>
-            <img src="public/images/gameover.png" alt="asleep cat next to a knocked over box" width="80%">
+            <img src="public/images/gameover.png" alt="asleep cat next to a knocked over box" class="game-over-image">
             <p class="game-over-final-score">Your score: <span class="final-score">0</span></p>
             <p class="game-over-high-score">High score: <span class="high-score">0</span></p>
             <section class="menu-button-container">
@@ -94,6 +94,7 @@
             </div>
             <img src="public/images/main_menu_background.jpg" alt="cat sitting on top of a stack of boxes inside a warehouse" class="background">
         </div>
+    </section> 
     </div>
     <section class="menu-container settings-menu hidden">
         <div class="menu">
