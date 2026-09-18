@@ -7,6 +7,7 @@ let isMuted = false;
 
 const musicAudioElement = document.querySelector('.background-music');
 const sfxAudioElement = document.querySelector('.sfx');
+const crashAudioElement = document.querySelector('.sfx-crash');
 
 const pauseMusicVolumeNumber = document.querySelector('#pause-music-volume-number');
 const pauseSfxVolumeNumber = document.querySelector('#pause-sfx-volume-number');
@@ -26,6 +27,7 @@ const inactiveColor = '#2C363F';
 function applyVolumes() {
     musicAudioElement.volume = isMuted ? 0 : audioLevels.backgroundMusicVolume;
     sfxAudioElement.volume = isMuted ? 0 : audioLevels.sfxMusicVolume;
+    crashAudioElement.volume = isMuted ? 0 : audioLevels.sfxMusicVolume;
 }
 
 function setMusicVolume(value) {

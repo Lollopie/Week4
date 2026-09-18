@@ -106,6 +106,8 @@ function checkCollision() {
 
 function handleGameOver() {
     gameOver = true;
+    crashAudio.currentTime = 0;
+    crashAudio.play().catch(() => {});
     clearTimeout(tickTimer);
     tickTimer = null;
 
@@ -282,6 +284,7 @@ howToPlayMenu
     .addEventListener('click', () => closeHowToPlayMenu());
 
 const sfxAudio = document.querySelector('.sfx');
+const crashAudio = document.querySelector('.sfx-crash');
 
 addEventListener('click', () => {
     musicAudioElement.play().catch(() => {});
