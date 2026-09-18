@@ -100,7 +100,5 @@ songOptions.forEach((songOption) => {
         });
     });
 });
-
-// Push the 30% defaults onto the elements — without this they play at full volume.
 setMusicVolume(audioLevels.backgroundMusicVolume);
 setSFXVolume(audioLevels.sfxMusicVolume);
