@@ -5,18 +5,40 @@ const menu = document.querySelector('.menu');
 const playerWalking = canvas.querySelector('.player.walking');
 const playerJumping = canvas.querySelector('.player.jumping');
 const scoreField = canvas.querySelector('.score');
-const jumpLengthInTicks = 60;
-const obstacleAnimationInTicks = 150;
-let inJump = false;
-let gameOver = false;
-let drawingHitboxes = false;
-let isPaused = false;
-let isMainMenuOpen = true;
+
 const gameOverCard = document.querySelector('.menu.game-over');
 const finalScore = gameOverCard.querySelector('.final-score');
 const highScore = gameOverCard.querySelector('.high-score');
 const gameOverFinalScoreField = gameOverCard.querySelector('.game-over-final-score');
 const gameOverHighScoreField = gameOverCard.querySelector('.game-over-high-score');
+
+const jumpLengthInTicks = 60;
+const obstacleAnimationInTicks = 150;
+const obstacleSpawnBaseLikelihood = 80;
+const minTicksToNextObstacle = 100;
+
+let inJump = false;
+let gameOver = false;
+let drawingHitboxes = false;
+let isPaused = false;
+let isMainMenuOpen = true;
+
+let obstacles = [];
+let removeObstacleTicks = [];
+let obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
+let nextObstacleTick = 0;
+let removeJumpTick = Infinity;
+let tick = 0;
+let tickTimer = null;
+
+let highScoreValue = parseInt(localStorage.getItem('highScore')) || 0;
+highScore.textContent = highScoreValue;
+
+const obstacleTypes = [
+    { width: 50, height: 50, image: 'singlebox.png' },
+    { width: 90, height: 50, image: 'widebox.png' },
+    { width: 50, height: 100, image: 'tallbox.png' }
+];
 
 function removeJump() {
     if (!gameOver) {
@@ -24,18 +46,6 @@ function removeJump() {
         playerJumping.classList.add('hidden');
         playerWalking.classList.remove('hidden');
         inJump = false;
-        playerWalking.offsetWidth;
-    }
-}
-
-function removeObstacle() {
-    while (tick >= removeObstacleTicks[0]) {
-        removeObstacleTicks.shift();
-        canvas.removeChild(obstacles.shift());
-
-        if (!gameOver) {
-            incrementScore();
-        }
     }
 }
 
@@ -44,27 +54,28 @@ function incrementScore() {
     scoreField.textContent = 'Score: ' + (currentScore + 1);
 }
 
-let obstacles = [];
-let removeObstacleTicks = [];
+function removeObstacle() {
+    while (tick >= removeObstacleTicks[0]) {
+        removeObstacleTicks.shift();
+        obstacles.shift().remove();
 
-function shouldGenerateNewObstacle(obstacleSpawnLikelihood) {
-    return Math.floor(Math.random() * Math.pow(2, obstacleSpawnLikelihood)) === 0;
+        if (!gameOver) {
+            incrementScore();
+        }
+    }
 }
 
-const obstacleTypes = [
-    { width: 50, height: 50, image: 'singlebox.png' },
-    { width: 90, height: 50, image: 'widebox.png' },
-    { width: 50, height: 100, image: 'tallbox.png' }
-];
+function shouldGenerateNewObstacle(likelihood) {
+    return Math.floor(Math.random() * Math.pow(2, likelihood)) === 0;
+}
 
-function createObstacle(obstacleSpawnLikelihood) {
-    if (shouldGenerateNewObstacle(obstacleSpawnLikelihood)) {
+function createObstacle(likelihood) {
+    if (shouldGenerateNewObstacle(likelihood)) {
         const obstacle = document.createElement('img');
-        const obstacleType =
-            obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+        const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
         obstacle.setAttribute('src', `public/images/${obstacleType.image}`);
 
-        obstacle.className = 'block' + (drawingHitboxes ? " drawHitbox" : "");
+        obstacle.className = 'block' + (drawingHitboxes ? ' drawHitbox' : '');
         obstacle.style.width = `${obstacleType.width}px`;
         obstacle.style.height = `${obstacleType.height}px`;
         canvas.appendChild(obstacle);
@@ -88,54 +99,43 @@ function isColliding(element1, element2) {
 }
 
 function checkCollision() {
-    for (let i = 0; i < obstacles.length; i++) {
-        const player = inJump ? playerJumping : playerWalking;
-        if (isColliding(obstacles[i], player)) {
-            return true;
-        }
-    }
-    return false;
+    const player = inJump ? playerJumping : playerWalking;
+    return obstacles.some((obstacle) => isColliding(obstacle, player));
 }
-const obstacleSpawnBaseLikelihood = 80;
-let obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
-const minTicksToNextObstacle = 100;
-let nextObstacleTick = 0;
-let removeJumpTick = Infinity;
-let tick = 0;
 
 function handleGameOver() {
-    console.log('Game over');
     gameOver = true;
+    clearTimeout(tickTimer);
+    tickTimer = null;
+
     const score = parseInt(scoreField.textContent.split(': ')[1]);
     finalScore.textContent = score;
-    if (score > highScore.textContent) {
-        gameOverFinalScoreField.classList.add('rainbow_text_animated');
-        gameOverHighScoreField.classList.add('rainbow_text_animated');
+
+    const isNewRecord = score > highScoreValue;
+    if (isNewRecord) {
+        highScoreValue = score;
         highScore.textContent = score;
-    } else {
-        gameOverFinalScoreField.classList.remove('rainbow_text_animated');
-        gameOverHighScoreField.classList.remove('rainbow_text_animated');
+        localStorage.setItem('highScore', score);
     }
+    gameOverFinalScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
+    gameOverHighScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
+
     gameOverCard.classList.remove('hidden');
-    obstacles.forEach((obstacle) => {
-        obstacle.classList.add('paused');
-    });
+    obstacles.forEach((obstacle) => obstacle.classList.add('paused'));
     playerJumping.classList.add('paused');
     playerWalking.classList.add('paused');
     canvas.classList.add('muted');
 }
 
 function performGameTick() {
-    const hasCollided = checkCollision();
-    if (hasCollided) {
+    if (checkCollision()) {
         handleGameOver();
     }
     if (tick >= nextObstacleTick) {
         const obstacle = createObstacle(obstacleSpawnLikelihood);
         if (obstacle === null) {
             obstacleSpawnLikelihood -= 1;
-        }
-        else {
+        } else {
             obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
             nextObstacleTick = tick + minTicksToNextObstacle;
         }
@@ -149,34 +149,40 @@ function performGameTick() {
     }
     if (!gameOver && !isPaused) {
         tick += 1;
-        setTimeout(performGameTick, 10);
+        tickTimer = setTimeout(performGameTick, 10);
     }
 }
 
 function togglePause() {
-    if (!gameOver) {
-        isPaused = !isPaused;
-        obstacles.forEach((obstacle) => {
-            obstacle.classList.toggle('paused');
-        });
-        playerJumping.classList.toggle('paused');
-        playerWalking.classList.toggle('paused');
-        canvas.classList.toggle('muted');
-        menu.classList.toggle('hidden');
-        if (!isPaused) {
-            performGameTick();
-        }
+    if (gameOver) {
+        return;
+    }
+    isPaused = !isPaused;
+    obstacles.forEach((obstacle) => obstacle.classList.toggle('paused'));
+    playerJumping.classList.toggle('paused');
+    playerWalking.classList.toggle('paused');
+    canvas.classList.toggle('muted');
+    menu.classList.toggle('hidden');
+
+    clearTimeout(tickTimer);
+    tickTimer = null;
+
+    if (!isPaused) {
+        performGameTick();
     }
 }
 
-function startGame() {
-    performGameTick();
-}
-
-function resetGame() {
+function clearObstacles() {
     obstacles.forEach((obstacle) => obstacle.remove());
     obstacles = [];
     removeObstacleTicks = [];
+}
+
+function resetGame() {
+    clearTimeout(tickTimer);
+    tickTimer = null;
+
+    clearObstacles();
     tick = 0;
     obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
     nextObstacleTick = 0;
@@ -184,6 +190,7 @@ function resetGame() {
     inJump = false;
     gameOver = false;
     isPaused = false;
+
     scoreField.textContent = 'Score: 0';
     gameOverCard.classList.add('hidden');
     menu.classList.add('hidden');
@@ -191,90 +198,116 @@ function resetGame() {
     playerJumping.classList.add('hidden');
     playerWalking.classList.remove('hidden', 'paused');
     canvas.classList.remove('muted');
-    startGame();
+
+    performGameTick();
+}
+
+function returnToMainMenu() {
+    clearTimeout(tickTimer);
+    tickTimer = null;
+
+    clearObstacles();
+    gameOver = false;
+    isPaused = false;
+    gameOverCard.classList.add('hidden');
+    menu.classList.add('hidden');
+    canvas.classList.remove('muted');
+
+    mainMenuContainer.classList.remove('hidden');
+    isMainMenuOpen = true;
 }
 
 const playButton = document.querySelector('.play-button');
 playButton.addEventListener('click', () => {
+    musicAudioElement.play().catch(() => {});
     mainMenuContainer.classList.add('hidden');
     isMainMenuOpen = false;
     resetGame();
-})
+});
 
 const resumeButton = document.querySelector('.resume-button');
 resumeButton.addEventListener('click', () => togglePause());
-const menuRestartButton = document.querySelector('.menu-button.restart-button');
+
+const menuRestartButton = menu.querySelector('.restart-button');
 menuRestartButton.addEventListener('click', () => resetGame());
+
 const gameOverRestartButton = gameOverCard.querySelector('.restart-button');
 gameOverRestartButton.addEventListener('click', () => resetGame());
+
 const mainMenuButton = gameOverCard.querySelector('.main-menu-return-button');
-mainMenuButton.addEventListener('click', () => {
-    mainMenuContainer.classList.remove('hidden');
-    isMainMenuOpen = true;
-});
-const settingsMainMenuButton = document.querySelector('.settings-button');
+mainMenuButton.addEventListener('click', () => returnToMainMenu());
+
 const settingsMenu = document.querySelector('.settings-menu');
+const settingsMainMenuButton = document.querySelector('.settings-button');
 let isSettingsMenuOpen = false;
+
+function closeSettingsMenu() {
+    settingsMenu.classList.add('hidden');
+    mainMenu.classList.remove('muted');
+    isSettingsMenuOpen = false;
+}
+
 settingsMainMenuButton.addEventListener('click', () => {
     settingsMenu.classList.remove('hidden');
     mainMenu.classList.add('muted');
     isSettingsMenuOpen = true;
 });
-const settingsMenuExitButton = settingsMenu.querySelector('.settings-menu-exit-button');
-settingsMenuExitButton.addEventListener('click', () => {
-    settingsMenu.classList.add('hidden');
-    mainMenu.classList.remove('muted');
-    isSettingsMenuOpen = false;
-});
-let isHowToPlayMenuOpen = false;
+settingsMenu
+    .querySelector('.settings-menu-exit-button')
+    .addEventListener('click', () => closeSettingsMenu());
+
 const howToPlayMenu = document.querySelector('.htp-menu');
 const howToPlayMainMenuButton = document.querySelector('.htp-button');
+let isHowToPlayMenuOpen = false;
+
+function closeHowToPlayMenu() {
+    howToPlayMenu.classList.add('hidden');
+    mainMenu.classList.remove('muted');
+    isHowToPlayMenuOpen = false;
+}
+
 howToPlayMainMenuButton.addEventListener('click', () => {
     howToPlayMenu.classList.remove('hidden');
     mainMenu.classList.add('muted');
     isHowToPlayMenuOpen = true;
 });
-const howToPlayMenuExitButton = howToPlayMenu.querySelector('.htp-menu-exit-button');
-howToPlayMenuExitButton.addEventListener('click', () => {
-    howToPlayMenu.classList.add('hidden');
-    mainMenu.classList.remove('muted');
-    isHowToPlayMenuOpen = false;
-});
+howToPlayMenu
+    .querySelector('.htp-menu-exit-button')
+    .addEventListener('click', () => closeHowToPlayMenu());
 
 const sfxAudio = document.querySelector('.sfx');
+
 addEventListener('keydown', (e) => {
-    if (e.key === " ") {
-        if (!inJump && !gameOver && !isPaused) {
+    if (e.key === ' ') {
+        if (!inJump && !gameOver && !isPaused && !isMainMenuOpen) {
             e.preventDefault();
             inJump = true;
             playerJumping.classList.add('jump');
             playerJumping.classList.remove('hidden');
             playerWalking.classList.add('hidden');
             removeJumpTick = tick + jumpLengthInTicks;
-            sfxAudio.setAttribute('src', 'public/music/jump.mp3');
-            sfxAudio.play();
+            sfxAudio.currentTime = 0;
+            sfxAudio.play().catch(() => {});
         }
-    }
-    else if (e.key === "h") {
+    } else if (e.key === 'h') {
+        if (isMainMenuOpen) {
+            return;
+        }
         drawingHitboxes = !drawingHitboxes;
         playerJumping.classList.toggle('drawHitbox');
         playerWalking.classList.toggle('drawHitbox');
         obstacles.forEach((obstacle) => obstacle.classList.toggle('drawHitbox'));
-    }
-    else if (e.key === 'Escape') {
-        if (!isMainMenuOpen) {
-            togglePause();
-        } else {
+    } else if (e.key === 'Escape') {
+        if (isMainMenuOpen) {
             if (isSettingsMenuOpen) {
-                isSettingsMenuOpen = false;
-                settingsMenu.classList.add('hidden');
-                mainMenu.classList.remove('muted');
+                closeSettingsMenu();
             } else if (isHowToPlayMenuOpen) {
-                isHowToPlayMenuOpen = false;
-                howToPlayMenu.classList.add('hidden');
-                mainMenu.classList.remove('muted');
+                closeHowToPlayMenu();
             }
+        } else if (gameOver) {
+            returnToMainMenu();
+        } else {
+            togglePause();
         }
     }
-})
-
+});
