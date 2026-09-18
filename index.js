@@ -222,6 +222,7 @@ playButton.addEventListener('click', () => {
     musicAudioElement.play().catch(() => {});
     mainMenuContainer.classList.add('hidden');
     isMainMenuOpen = false;
+    scoreField.classList.remove('hidden');      // ← add
     resetGame();
 });
 
