@@ -329,8 +329,9 @@ img {
 }
 
 .main-menu-button {
-    width: 200px;
+    width: 240px;
     height: 60px;
+    font-size: medium;
     background-color: #555C51;
 }
 
