@@ -256,7 +256,7 @@ body {
     background-color: #81444B;
 }
 
-.main-menu-button {
+.main-menu-return-button {
     background-color: #68816C;
 }
 
@@ -287,4 +287,166 @@ img {
 
 .muted {
     filter: saturate(50%);
+}
+
+.main-menu-container {
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.main-menu {
+    display: flex;
+    flex: column;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    font-family: 'PressStart2P', sarif;
+    position: relative;
+}
+
+.main-menu>h1{
+    color: orange;
+    position: absolute;
+}
+
+.main-menu-button{
+    width: 200px;
+    height: 60px;
+    background-color: #555C51;
+}
+
+.main-menu-button-container{
+    position: absolute;
+    top: 200px;
+    left: 50px;
+
+    background: rgb(43 50 56 0.5);
+    border: 5px double #959DA0;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    align-items: center;
+
+    font-family: 'PressStart2p', serif;
+    color: #DBD7BE;
+
+    overflow: scroll;
+}
+
+.play-button {
+    background-color: #68816C;
+}
+
+.main-menu-audio {
+    position: absolute;
+    bottom: 10vh;
+    left: 100px;
+}
+
+.settings-menu-exit-button {
+    background-color: #81444B;
+}
+
+.htp-menu>.menu {
+    width: 500px;
+    height: 400px;
+    overflow: scroll;
+    gap: 10px;
+} 
+
+.htp-graphic {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.htp-graphic>.htp-cat-walking{
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
+}
+
+.htp-graphic>.htp-cat-walking>img{
+    width: 100%;
+    height: 100%;
+}
+
+.htp-graphic>.htp-cat-jumping{
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    bottom: 150px;
+    left: 160px;
+}   
+
+.htp-graphic>#jumpArc {
+    --a: 72deg;
+    transform: rotate(-66deg);
+    width: 210px;
+    aspect-ratio: 1;
+    padding: 3px;
+    box-sizing: border-box;
+    border-style: dashed;
+    border-radius: 50%;
+    border-color: #555C51;
+    mask:
+        linear-gradient(#0000 0 0) content-box intersect,
+        conic-gradient(#000 var(--a),#0000 0);
+
+    position: relative;
+    top: 20px;
+    left: 35px;
+}
+
+.htp-graphic>.htp-cat-jumping>img{
+    width: 100%;
+    height: 100%;
+}
+
+.htp-graphic>.htp-box{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 50px;
+    left: 150px;
+}
+
+.htp-graphic>.htp-box>img{
+    width: 100%;
+    height: 100%;
+}
+
+.htp-graphic>.htp-space{
+    width: 200px;
+    height: 35px;
+    position: absolute;
+    bottom: 0px;
+    left: 10px;
+    font-family: 'PressStart2P', sans-serif;
+    
+    border: 5px #68816C outset;
+}
+
+.htp-graphic>.htp-space:hover{
+    border: 5px #68816C inset;
+}
+
+.htp-text {
+    position: relative; 
+    width: 100%;
+}
+
+.htp-menu-exit-button {
+    background-color: #81444B;
+    height: 40px;
 }

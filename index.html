@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Whisker's Warehouse Leap</title>
     <script defer src="index.js"></script>
-    <link rel="stylesheet" href="index.css">
+    <script defer src="audio.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" type="image/x-icon" href="public/favicon.png">
 </head>
 
 <body>
@@ -35,25 +37,25 @@
                 <audio autoplay loop src="public/music/CAT CHASE.mp3" class="background-music"></audio>
                 <audio src="public/music/jump.mp3" class="sfx"></audio>
                 <div class="volume-indicator">
-                    <label for="music-volume" class="menu-label">Music Volume:</label>
-                    <output id="music-volume-number">
+                    <label for="pause-music-volume" class="menu-label">Music Volume:</label>
+                    <output id="pause-music-volume-number">
                         30%
                     </output>
                 </div>
                 <div class="volume-bar-container">
                     <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
-                    <input type="range" id="music-volume" name="volume" class="volume" value="30" min="0" max="100">
+                    <input type="range" id="pause-music-volume" name="volume" class="volume" value="30" min="0" max="100">
                     <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
                 </div>
                 <div class="volume-indicator">
-                    <label for="sfx-volume" class="menu-label">SFX Volume:</label>
-                    <output id="sfx-volume-number">
+                    <label for="pause-sfx-volume" class="menu-label">SFX Volume:</label>
+                    <output id="pause-sfx-volume-number">
                         30%
                     </output>
                 </div>
                 <div class="volume-bar-container">
                     <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
-                    <input type="range" id="sfx-volume" name="volume" class="volume" value="30" min="0" max="100">
+                    <input type="range" id="pause-sfx-volume" name="volume" class="volume" value="30" min="0" max="100">
                     <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
                 </div>
             </div>
@@ -69,10 +71,93 @@
             <p class="game-over-high-score">High score: <span class="high-score">0</span></p>
             <section class="menu-button-container">
                 <button class="menu-button restart-button">RESTART</button>
-                <button class="menu-button main-menu-button">MAIN MENU</button>
+                <button class="menu-button main-menu-return-button">MAIN MENU</button>
             </section>
         </div>
     </section>
+    <section class="main-menu-container">
+        <div class="main-menu">
+            <h1>Whisker's Warehouse Leap</h1>
+            <aside class="main-menu-button-container">
+                <button class="menu-button main-menu-button play-button">
+                    Play
+                </button>
+                <button class="menu-button main-menu-button settings-button">
+                    Settings
+                </button>
+                <button class="menu-button main-menu-button htp-button">
+                    How To Play
+                </button>
+            </aside>
+            <div class="main-menu-audio">
+                <i class="fa-solid fa-volume-high fa-3x" style="color: rgb(144, 158, 158);"></i>
+            </div>
+            <img src="public/images/main_menu_background.jpg" alt="cat sitting on top of a stack of boxes inside a warehouse" class="background">
+        </div>
+    </div>
+    <section class="menu-container settings-menu hidden">
+        <div class="menu">
+            <h2>SETTINGS</h2>
+            <h2 class="menu-header">BACKGROUND MUSIC SELECTOR</h2>
+            <div class="bg-music-container">
+                <div class="bg-music bg-music-active">[x] CAT CHASE</div>
+                <div class="bg-music">[ ] CRATE CONGA</div>
+            </div>
+            <div class="volume-container">
+                <h2 class="menu-header">SOUND LEVELS</h2>
+                <div class="volume-indicator">
+                    <label for="settings-music-volume" class="menu-label">Music Volume:</label>
+                    <output id="settings-music-volume-number">
+                        30%
+                    </output>
+                </div>
+                <div class="volume-bar-container">
+                    <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
+                    <input type="range" id="settings-music-volume" name="volume" class="volume" value="30" min="0" max="100">
+                    <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
+                </div>
+                <div class="volume-indicator">
+                    <label for="settings-sfx-volume" class="menu-label">SFX Volume:</label>
+                    <output id="settings-sfx-volume-number">
+                        30%
+                    </output>
+                </div>
+                <div class="volume-bar-container">
+                    <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
+                    <input type="range" id="settings-sfx-volume" name="volume" class="volume" value="30" min="0" max="100">
+                    <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
+                </div>
+            </div>
+            <button class="menu-button settings-menu-exit-button">
+                EXIT
+            </button>
+        </div>
+    </section>
+    <section class="menu-container htp-menu hidden">
+        <div class="menu">
+            <h2>HOW TO PLAY</h2>
+            <section class="htp-graphic">
+                <div class="htp-cat-walking">
+                    <img src="public/images/cat_walking.png" alt="cat walking">
+                </div>
+                <div id="jumpArc"></div>
+                <div class="htp-cat-jumping">
+                    <img src="public/images/cat_jumping.png" alt="cat jumping">
+                </div>
+                <div class="htp-box">
+                    <img src="public/images/singlebox.png" alt="small box">
+                </div>
+                <button class="htp-space">
+                    SPACE
+                </button>
+            </section>
+            <p class="htp-text">
+                Press SPACE to jump over crates
+            </p>
+            <button class="menu-button htp-menu-exit-button">
+                EXIT
+            </button>
+        </div>
+    </section>
 </body>
-
 </html>

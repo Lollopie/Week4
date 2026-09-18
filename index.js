@@ -1,20 +1,17 @@
 const canvas = document.querySelector('.canvas');
+const mainMenuContainer = document.querySelector('.main-menu-container');
+const mainMenu = document.querySelector('.main-menu');
 const menu = document.querySelector('.menu');
 const playerWalking = canvas.querySelector('.player.walking');
 const playerJumping = canvas.querySelector('.player.jumping');
 const scoreField = canvas.querySelector('.score');
-const musicVolumeNumber = document.querySelector('#music-volume-number');
-const sfxVolumeNumber = document.querySelector('#sfx-volume-number');
-const music = document.querySelector('.background-music');
-music.volume = 0.3;
-const sfx = document.querySelector('.sfx');
-sfx.volume = 0.3;
 const jumpLengthInTicks = 60;
 const obstacleAnimationInTicks = 150;
 let inJump = false;
 let gameOver = false;
 let drawingHitboxes = false;
 let isPaused = false;
+let isMainMenuOpen = true;
 const gameOverCard = document.querySelector('.menu.game-over');
 const finalScore = gameOverCard.querySelector('.final-score');
 const highScore = gameOverCard.querySelector('.high-score');
@@ -197,7 +194,12 @@ function resetGame() {
     startGame();
 }
 
-startGame();
+const playButton = document.querySelector('.play-button');
+playButton.addEventListener('click', () => {
+    mainMenuContainer.classList.add('hidden');
+    isMainMenuOpen = false;
+    resetGame();
+})
 
 const resumeButton = document.querySelector('.resume-button');
 resumeButton.addEventListener('click', () => togglePause());
@@ -205,7 +207,41 @@ const menuRestartButton = document.querySelector('.menu-button.restart-button');
 menuRestartButton.addEventListener('click', () => resetGame());
 const gameOverRestartButton = gameOverCard.querySelector('.restart-button');
 gameOverRestartButton.addEventListener('click', () => resetGame());
+const mainMenuButton = gameOverCard.querySelector('.main-menu-return-button');
+mainMenuButton.addEventListener('click', () => {
+    mainMenuContainer.classList.remove('hidden');
+    isMainMenuOpen = true;
+});
+const settingsMainMenuButton = document.querySelector('.settings-button');
+const settingsMenu = document.querySelector('.settings-menu');
+let isSettingsMenuOpen = false;
+settingsMainMenuButton.addEventListener('click', () => {
+    settingsMenu.classList.remove('hidden');
+    mainMenu.classList.add('muted');
+    isSettingsMenuOpen = true;
+});
+const settingsMenuExitButton = settingsMenu.querySelector('.settings-menu-exit-button');
+settingsMenuExitButton.addEventListener('click', () => {
+    settingsMenu.classList.add('hidden');
+    mainMenu.classList.remove('muted');
+    isSettingsMenuOpen = false;
+});
+let isHowToPlayMenuOpen = false;
+const howToPlayMenu = document.querySelector('.htp-menu');
+const howToPlayMainMenuButton = document.querySelector('.htp-button');
+howToPlayMainMenuButton.addEventListener('click', () => {
+    howToPlayMenu.classList.remove('hidden');
+    mainMenu.classList.add('muted');
+    isHowToPlayMenuOpen = true;
+});
+const howToPlayMenuExitButton = howToPlayMenu.querySelector('.htp-menu-exit-button');
+howToPlayMenuExitButton.addEventListener('click', () => {
+    howToPlayMenu.classList.add('hidden');
+    mainMenu.classList.remove('muted');
+    isHowToPlayMenuOpen = false;
+});
 
+const sfxAudio = document.querySelector('.sfx');
 addEventListener('keydown', (e) => {
     if (e.key === " ") {
         if (!inJump && !gameOver && !isPaused) {
@@ -215,8 +251,8 @@ addEventListener('keydown', (e) => {
             playerJumping.classList.remove('hidden');
             playerWalking.classList.add('hidden');
             removeJumpTick = tick + jumpLengthInTicks;
-            sfx.setAttribute('src', 'public/music/jump.mp3');
-            sfx.play();
+            sfxAudio.setAttribute('src', 'public/music/jump.mp3');
+            sfxAudio.play();
         }
     }
     else if (e.key === "h") {
@@ -226,40 +262,19 @@ addEventListener('keydown', (e) => {
         obstacles.forEach((obstacle) => obstacle.classList.toggle('drawHitbox'));
     }
     else if (e.key === 'Escape') {
-        togglePause();
+        if (!isMainMenuOpen) {
+            togglePause();
+        } else {
+            if (isSettingsMenuOpen) {
+                isSettingsMenuOpen = false;
+                settingsMenu.classList.add('hidden');
+                mainMenu.classList.remove('muted');
+            } else if (isHowToPlayMenuOpen) {
+                isHowToPlayMenuOpen = false;
+                howToPlayMenu.classList.add('hidden');
+                mainMenu.classList.remove('muted');
+            }
+        }
     }
 })
 
-const musicVolume = document.querySelector("#music-volume");
-const sfxVolume = document.querySelector('#sfx-volume');
-const activeColor = "#6D7D76";
-const inactiveColor = "#2C363F";
-
-function adjustVolume(volumeRange, volumeNumber, audioElement) {
-    const ratio = Math.floor((volumeRange.value - volumeRange.min) / (volumeRange.max - volumeRange.min) * 100);
-    volumeRange.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
-    volumeNumber.textContent = `${ratio}%`;
-    volumeNumber.style.left = `${ratio}%`;
-    audioElement.volume = ratio / 100;
-}
-
-musicVolume.addEventListener("input", function () {
-    adjustVolume(musicVolume, musicVolumeNumber, music);
-});
-
-sfxVolume.addEventListener("input", function () {
-    adjustVolume(sfxVolume, sfxVolumeNumber, sfx);
-});
-
-const songOptions = [...document.querySelectorAll('.bg-music')];
-songOptions.forEach((songOption) => {
-    songOption.addEventListener("click", function () {
-        const songName = this.textContent.slice(4);
-        music.setAttribute('src', `public/music/${songName}.mp3`);
-        const activeSongOption = songOptions.filter((songOption) => songOption.textContent[1] === 'x')[0];
-        activeSongOption.classList.remove('bg-music-active');
-        activeSongOption.textContent = '[ ]' + activeSongOption.textContent.slice(3);
-        songOption.classList.add('bg-music-active');
-        songOption.textContent = '[x]' + songOption.textContent.slice(3);
-    })
-});
