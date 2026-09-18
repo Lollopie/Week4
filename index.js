@@ -284,8 +284,6 @@ addEventListener('click', () => {
 }, { once: true });
 
 addEventListener('keydown', (e) => {
-
-addEventListener('keydown', (e) => {
     if (e.key === ' ') {
         if (!inJump && !gameOver && !isPaused && !isMainMenuOpen) {
             e.preventDefault();
