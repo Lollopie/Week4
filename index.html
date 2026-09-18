@@ -8,7 +8,7 @@
     <script defer src="index.js"></script>
     <script defer src="audio.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+        referrerpolicy="no-referrer">
     <link rel="stylesheet" href="index.css">
     <link rel="icon" type="image/png" href="public/favicon.png">
 </head>
@@ -16,6 +16,7 @@
 <body>
     <audio loop src="public/music/CAT_CHASE.mp3" class="background-music"></audio>
     <audio src="public/music/jump.mp3" class="sfx"></audio>
+
     <div class="canvas-container">
         <div class="canvas">
             <div class="score">
@@ -26,21 +27,20 @@
             <img src="public/images/cat_jumping.png" class="player jumping hidden" alt="cat jumping">
         </div>
     </div>
+
     <section class="menu-container">
         <div class="menu hidden">
             <h1>PAUSE</h1>
             <h2 class="menu-header">BACKGROUND MUSIC SELECTOR</h2>
             <div class="bg-music-container">
-                <div class="bg-music bg-music-active">[x] CAT CHASE</div>
-                <div class="bg-music">[ ] CRATE CONGA</div>
+                <div class="bg-music bg-music-active" data-track="CAT_CHASE">[x] CAT CHASE</div>
+                <div class="bg-music" data-track="CRATE_CONGA">[ ] CRATE CONGA</div>
             </div>
             <div class="volume-container">
                 <h2 class="menu-header">SOUND LEVELS</h2>
                 <div class="volume-indicator">
                     <label for="pause-music-volume" class="menu-label">Music Volume:</label>
-                    <output id="pause-music-volume-number">
-                        30%
-                    </output>
+                    <output id="pause-music-volume-number" for="pause-music-volume">30%</output>
                 </div>
                 <div class="volume-bar-container">
                     <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
@@ -49,9 +49,7 @@
                 </div>
                 <div class="volume-indicator">
                     <label for="pause-sfx-volume" class="menu-label">SFX Volume:</label>
-                    <output id="pause-sfx-volume-number">
-                        30%
-                    </output>
+                    <output id="pause-sfx-volume-number" for="pause-sfx-volume">30%</output>
                 </div>
                 <div class="volume-bar-container">
                     <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
@@ -64,6 +62,7 @@
                 <button class="menu-button restart-button">RESTART</button>
             </section>
         </div>
+
         <div class="menu game-over hidden">
             <h1>GAME OVER</h1>
             <img src="public/images/gameover.png" alt="asleep cat next to a knocked over box" class="game-over-image">
@@ -75,6 +74,7 @@
             </section>
         </div>
     </section>
+
     <section class="main-menu-container">
         <div class="main-menu">
             <h1>Whisker's Warehouse Leap</h1>
@@ -94,23 +94,21 @@
             </div>
             <img src="public/images/main_menu_background.jpg" alt="cat sitting on top of a stack of boxes inside a warehouse" class="background">
         </div>
-    </section> 
-    </div>
+    </section>
+
     <section class="menu-container settings-menu hidden">
         <div class="menu">
             <h2>SETTINGS</h2>
             <h2 class="menu-header">BACKGROUND MUSIC SELECTOR</h2>
             <div class="bg-music-container">
-                <div class="bg-music bg-music-active">[x] CAT CHASE</div>
-                <div class="bg-music">[ ] CRATE CONGA</div>
+                <div class="bg-music bg-music-active" data-track="CAT_CHASE">[x] CAT CHASE</div>
+                <div class="bg-music" data-track="CRATE_CONGA">[ ] CRATE CONGA</div>
             </div>
             <div class="volume-container">
                 <h2 class="menu-header">SOUND LEVELS</h2>
                 <div class="volume-indicator">
                     <label for="settings-music-volume" class="menu-label">Music Volume:</label>
-                    <output id="settings-music-volume-number">
-                        30%
-                    </output>
+                    <output id="settings-music-volume-number" for="settings-music-volume">30%</output>
                 </div>
                 <div class="volume-bar-container">
                     <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
@@ -119,9 +117,7 @@
                 </div>
                 <div class="volume-indicator">
                     <label for="settings-sfx-volume" class="menu-label">SFX Volume:</label>
-                    <output id="settings-sfx-volume-number">
-                        30%
-                    </output>
+                    <output id="settings-sfx-volume-number" for="settings-sfx-volume">30%</output>
                 </div>
                 <div class="volume-bar-container">
                     <i class="fa-solid fa-volume-xmark fa-lg" style="color: rgb(144, 158, 158);"></i>
@@ -134,6 +130,7 @@
             </button>
         </div>
     </section>
+
     <section class="menu-container htp-menu hidden">
         <div class="menu">
             <h2>HOW TO PLAY</h2>
@@ -148,9 +145,9 @@
                 <div class="htp-box">
                     <img src="public/images/singlebox.png" alt="small box">
                 </div>
-                <button class="htp-space">
+                <div class="htp-space">
                     SPACE
-                </button>
+                </div>
             </section>
             <p class="htp-text">
                 Press SPACE to jump over crates
@@ -161,4 +158,5 @@
         </div>
     </section>
 </body>
+
 </html>

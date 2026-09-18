@@ -86,8 +86,8 @@ mainMenuMuteButton.addEventListener('click', function () {
 const songOptions = [...document.querySelectorAll('.bg-music')];
 songOptions.forEach((songOption) => {
     songOption.addEventListener("click", function () {
-        const songName = this.textContent.slice(4);
-        musicAudioElement.setAttribute('src', `public/music/${songName}.mp3`);
+        musicAudioElement.setAttribute('src', `public/music/${this.dataset.track}.mp3`);
+        musicAudioElement.play().catch(() => {});
         const activeSongOptions = songOptions.filter((songOption) => songOption.textContent[1] === 'x');
         activeSongOptions.forEach((activeSongOption) => {
             activeSongOption.classList.remove('bg-music-active')
