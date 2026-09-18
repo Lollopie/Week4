@@ -75,13 +75,18 @@ document.addEventListener('sfxVolumeChanged', (e) => {
     settingsSfxVolumeNumber.textContent = `${percentage}%`;
 });
 
-const mainMenuMuteButton = document.querySelector('.main-menu-audio>.fa-solid');
-mainMenuMuteButton.addEventListener('click', function () {
+const muteButtons = [...document.querySelectorAll('.main-menu-audio>.fa-solid, .game-audio>.fa-solid')];
+
+function toggleMute() {
     isMuted = !isMuted;
-    this.classList.toggle('fa-volume-xmark', isMuted);
-    this.classList.toggle('fa-volume-high', !isMuted);
+    muteButtons.forEach((button) => {
+        button.classList.toggle('fa-volume-xmark', isMuted);
+        button.classList.toggle('fa-volume-high', !isMuted);
+    });
     applyVolumes();
-});
+}
+
+muteButtons.forEach((button) => button.addEventListener('click', () => toggleMute()));
 
 const songOptions = [...document.querySelectorAll('.bg-music')];
 songOptions.forEach((songOption) => {

@@ -212,7 +212,7 @@ body {
     width: 80%;
     border: #959DA0 5px double;
     padding: 10px;
-    
+
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -294,6 +294,14 @@ img {
 .game-over-image {
     width: 80%;
     height: auto;
+}
+
+.game-audio {
+    position: absolute;
+    top: 5vh;
+    right: 5vw;
+    cursor: pointer;
+    z-index: 2;
 }
 
 .rainbow_text_animated {
