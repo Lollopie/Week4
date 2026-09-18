@@ -310,15 +310,16 @@ img {
 
 .main-menu>h1 {
     margin: 0;
-    position: absolute;
-    top: 6vh;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    align-self: center;
+    margin-top: 4vh;
+    margin-bottom: auto;
 
-    width: 90%;
     text-align: center;
-    font-size: clamp(1.1rem, 3vw, 2.4rem);
-    line-height: 1.5;
+    font-size: clamp(0.8rem, 2.2vw, 1.8rem);
+    line-height: 1.6;
+    padding: 0 20px;
+    box-sizing: border-box;
 
     color: orange;
     text-shadow:
@@ -329,9 +330,9 @@ img {
 }
 
 .main-menu-button {
-    width: 240px;
+    width: 200px;
     height: 60px;
-    font-size: medium;
+    line-height: 1.6;
     background-color: #555C51;
 }
 
