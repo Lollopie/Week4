@@ -47,6 +47,9 @@ function removeJump() {
         playerJumping.classList.add('hidden');
         playerWalking.classList.remove('hidden');
         inJump = false;
+        //Forces the browser to reflow reference:https://stackoverflow.com/a/63561659
+        playerWalking.offsetWidth;
+        playerJumping.offsetWidth;
     }
 }
 
