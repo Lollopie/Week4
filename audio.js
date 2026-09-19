@@ -1,6 +1,6 @@
 const audioLevels = {
-    backgroundMusicVolume: 0.3,
-    sfxMusicVolume: 0.3,
+    backgroundMusicVolume: JSON.parse(localStorage.getItem('backgroundMusicVolume')) || 0.3,
+    sfxSoundVolume: JSON.parse(localStorage.getItem('sfxSoundVolume')) || 0.3,
 };
 
 let isMuted = false;
@@ -26,12 +26,13 @@ const inactiveColor = '#2C363F';
 
 function applyVolumes() {
     musicAudioElement.volume = isMuted ? 0 : audioLevels.backgroundMusicVolume;
-    sfxAudioElement.volume = isMuted ? 0 : audioLevels.sfxMusicVolume;
-    crashAudioElement.volume = isMuted ? 0 : audioLevels.sfxMusicVolume;
+    sfxAudioElement.volume = isMuted ? 0 : audioLevels.sfxSoundVolume;
+    crashAudioElement.volume = isMuted ? 0 : audioLevels.sfxSoundVolume;
 }
 
 function setMusicVolume(value) {
     audioLevels.backgroundMusicVolume = value;
+    localStorage.setItem('backgroundMusicVolume', JSON.stringify(value));
     applyVolumes();
     document.dispatchEvent(
         new CustomEvent('musicVolumeChanged', {
@@ -41,8 +42,9 @@ function setMusicVolume(value) {
 }
 
 function setSFXVolume(value) {
-    audioLevels.sfxMusicVolume = value;
+    audioLevels.sfxSoundVolume = value;
     applyVolumes();
+    localStorage.setItem('sfxSoundVolume', JSON.stringify(value));
     document.dispatchEvent(
         new CustomEvent('sfxVolumeChanged', {
             detail: { volume: value },
@@ -62,7 +64,7 @@ settingsMusicSlider.addEventListener('input', (e) => setMusicVolume(e.target.val
 settingsSfxSlider.addEventListener('input', (e) => setSFXVolume(e.target.value / 100));
 
 document.addEventListener('musicVolumeChanged', (e) => {
-    const percentage = Math.floor(e.detail.volume * 100);
+    const percentage = Math.round(e.detail.volume * 100);
     paintSlider(pauseMusicSlider, percentage);
     paintSlider(settingsMusicSlider, percentage);
     pauseMusicVolumeNumber.textContent = `${percentage}%`;
@@ -70,7 +72,7 @@ document.addEventListener('musicVolumeChanged', (e) => {
 });
 
 document.addEventListener('sfxVolumeChanged', (e) => {
-    const percentage = Math.floor(e.detail.volume * 100);
+    const percentage = Math.round(e.detail.volume * 100);
     paintSlider(pauseSfxSlider, percentage);
     paintSlider(settingsSfxSlider, percentage);
     pauseSfxVolumeNumber.textContent = `${percentage}%`;
@@ -91,21 +93,28 @@ function toggleMute() {
 muteButtons.forEach((button) => button.addEventListener('click', () => toggleMute()));
 
 const songOptions = [...document.querySelectorAll('.bg-music')];
+
+function playBackgroundMusicTrack(track) {
+    musicAudioElement.setAttribute('src', `public/music/${track}.mp3`);
+    musicAudioElement.load();
+    applyVolumes();
+    musicAudioElement.play().catch(() => {});
+    localStorage.setItem('backgroundMusicTrack', track);
+    songOptions.forEach((option) => {
+        const isSelected = option.dataset.track === track;
+        option.classList.toggle('bg-music-active', isSelected);
+        option.textContent = (isSelected ? '[x]' : '[ ]') + option.textContent.slice(3);
+    });
+}
+
 songOptions.forEach((songOption) => {
     songOption.addEventListener('click', function () {
         const track = this.dataset.track;
-
-        musicAudioElement.setAttribute('src', `public/music/${track}.mp3`);
-        musicAudioElement.load();
-        applyVolumes();
-        musicAudioElement.play().catch(() => {});
-
-        songOptions.forEach((option) => {
-            const isSelected = option.dataset.track === track;
-            option.classList.toggle('bg-music-active', isSelected);
-            option.textContent = (isSelected ? '[x]' : '[ ]') + option.textContent.slice(3);
-        });
+        playBackgroundMusicTrack(track);
     });
 });
+
 setMusicVolume(audioLevels.backgroundMusicVolume);
-setSFXVolume(audioLevels.sfxMusicVolume);
+setSFXVolume(audioLevels.sfxSoundVolume);
+const defaultTrack = 'CAT_CHASE';
+playBackgroundMusicTrack(localStorage.getItem('backgroundMusicTrack') || defaultTrack);
