@@ -32,7 +32,11 @@ let tick = 0;
 let tickTimer = null;
 let gameOverCardTimer = null;
 
-let highScoreValue = parseInt(localStorage.getItem('highScore')) || 0;
+let highScoreValue = 0;
+try {
+    highScoreValue = parseInt(localStorage.getItem('highScore')) || 0;
+} catch {
+}
 highScore.textContent = highScoreValue;
 
 const obstacleTypes = [
@@ -137,7 +141,10 @@ function handleGameOver() {
     if (isNewRecord) {
         highScoreValue = score;
         highScore.textContent = score;
-        localStorage.setItem('highScore', score);
+        try {
+            localStorage.setItem('highScore', score);
+        } catch {
+        }
     }
     gameOverFinalScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
     gameOverHighScoreField.classList.toggle('rainbow_text_animated', isNewRecord);

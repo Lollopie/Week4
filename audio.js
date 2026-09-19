@@ -1,9 +1,30 @@
+function storageGet(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+}
+
+function storageSet(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch {
+        // storage unavailable — ignore
+    }
+}
+
+function loadVolume(key) {
+    const stored = parseFloat(storageGet(key));
+    return Number.isNaN(stored) ? 0.3 : stored;
+}
+
 const audioLevels = {
-    backgroundMusicVolume: parseFloat(localStorage.getItem('backgroundMusicVolume')) || 0.3,
-    sfxSoundVolume: parseFloat(localStorage.getItem('sfxSoundVolume')) || 0.3,
+    backgroundMusicVolume: loadVolume('backgroundMusicVolume'),
+    sfxSoundVolume: loadVolume('sfxSoundVolume'),
 };
 
-let isMuted = false;
+let isMuted = storageGet('isMuted') === 'true';
 
 const musicAudioElement = document.querySelector('.background-music');
 const sfxAudioElement = document.querySelector('.sfx');
@@ -32,7 +53,7 @@ function applyVolumes() {
 
 function setMusicVolume(value) {
     audioLevels.backgroundMusicVolume = value;
-    localStorage.setItem('backgroundMusicVolume', value);
+    storageSet('backgroundMusicVolume', value);
     applyVolumes();
     document.dispatchEvent(
         new CustomEvent('musicVolumeChanged', {
@@ -44,7 +65,7 @@ function setMusicVolume(value) {
 function setSFXVolume(value) {
     audioLevels.sfxSoundVolume = value;
     applyVolumes();
-    localStorage.setItem('sfxSoundVolume', value);
+    storageSet('sfxSoundVolume', value);
     document.dispatchEvent(
         new CustomEvent('sfxVolumeChanged', {
             detail: { volume: value },
@@ -83,12 +104,20 @@ const muteButtons = [...document.querySelectorAll('.main-menu-audio>.fa-solid, .
 
 function toggleMute() {
     isMuted = !isMuted;
+    storageSet('isMuted', isMuted);
     muteButtons.forEach((button) => {
         button.classList.toggle('fa-volume-xmark', isMuted);
         button.classList.toggle('fa-volume-high', !isMuted);
     });
     applyVolumes();
 }
+
+muteButtons.forEach((button) => button.addEventListener('click', () => toggleMute()));
+
+muteButtons.forEach((button) => {
+    button.classList.toggle('fa-volume-xmark', isMuted);
+    button.classList.toggle('fa-volume-high', !isMuted);
+});
 
 muteButtons.forEach((button) => button.addEventListener('click', () => toggleMute()));
 
@@ -99,7 +128,7 @@ function playBackgroundMusicTrack(track) {
     musicAudioElement.load();
     applyVolumes();
     musicAudioElement.play().catch(() => {});
-    localStorage.setItem('backgroundMusicTrack', track);
+    storageSet('backgroundMusicTrack', track);
     songOptions.forEach((option) => {
         const isSelected = option.dataset.track === track;
         option.classList.toggle('bg-music-active', isSelected);
@@ -117,4 +146,4 @@ songOptions.forEach((songOption) => {
 setMusicVolume(audioLevels.backgroundMusicVolume);
 setSFXVolume(audioLevels.sfxSoundVolume);
 const defaultTrack = 'CAT_CHASE';
-playBackgroundMusicTrack(localStorage.getItem('backgroundMusicTrack') || defaultTrack);
+playBackgroundMusicTrack(storageGet('backgroundMusicTrack') || defaultTrack);
