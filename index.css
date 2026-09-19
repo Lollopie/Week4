@@ -55,7 +55,7 @@ body {
     }
 
     to {
-        transform: translateX(calc(-1920px - 100%));
+        transform: translateX(calc(-100vw - 100%));
     }
 }
 
