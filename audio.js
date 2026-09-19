@@ -119,8 +119,6 @@ muteButtons.forEach((button) => {
     button.classList.toggle('fa-volume-high', !isMuted);
 });
 
-muteButtons.forEach((button) => button.addEventListener('click', () => toggleMute()));
-
 const songOptions = [...document.querySelectorAll('.bg-music')];
 
 function playBackgroundMusicTrack(track) {

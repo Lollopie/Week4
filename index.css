@@ -411,6 +411,7 @@ img {
 }
 
 .main-menu-audio {
+    align-self: flex-start;
     justify-self: flex-end;
     margin-left: 30px;
     margin-bottom: 30px;
