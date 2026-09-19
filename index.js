@@ -316,17 +316,21 @@ addEventListener('click', () => {
     musicAudioElement.play().catch(() => {});
 }, { once: true });
 
+function performJump() {
+    inJump = true;
+    playerJumping.classList.add('jump');
+    playerJumping.classList.remove('hidden');
+    playerWalking.classList.add('hidden');
+    removeJumpTick = tick + jumpLengthInTicks;
+    sfxAudio.currentTime = 0;
+    sfxAudio.play().catch(() => {});
+}
+
 addEventListener('keydown', (e) => {
     if (e.key === ' ') {
+        e.preventDefault();
         if (!inJump && !gameOver && !isPaused && !isMainMenuOpen) {
-            e.preventDefault();
-            inJump = true;
-            playerJumping.classList.add('jump');
-            playerJumping.classList.remove('hidden');
-            playerWalking.classList.add('hidden');
-            removeJumpTick = tick + jumpLengthInTicks;
-            sfxAudio.currentTime = 0;
-            sfxAudio.play().catch(() => {});
+            performJump();
         }
     } else if (e.key === 'h') {
         if (isMainMenuOpen) {
@@ -348,5 +352,11 @@ addEventListener('keydown', (e) => {
         } else {
             togglePause();
         }
+    }
+});
+
+addEventListener('touchstart', () => {
+    if (!inJump && !gameOver && !isPaused && !isMainMenuOpen) {
+        performJump();
     }
 });
