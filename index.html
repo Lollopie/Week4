@@ -18,7 +18,7 @@
     <audio src="public/music/jump.mp3" class="sfx"></audio>
     <audio src="public/music/crash.wav" class="sfx-crash"></audio>
 
-    <div class="canvas-container">
+    <section class="canvas-container">
         <div class="canvas">
             <div class="score hidden">
                 Score: 0
@@ -26,21 +26,21 @@
              <div class="game-audio hidden">
                 <i class="fa-solid fa-volume-high fa-2x" style="color: rgb(144, 158, 158);"></i>
             </div>
-            <img src="public/images/background.jpg" class="background" alt="warehouse background">
+            <img src="public/images/background.jpg" class="background" alt="">
             <img src="public/images/cat_walking.png" class="player walking" alt="cat walking">
             <img src="public/images/cat_jumping.png" class="player jumping hidden" alt="cat jumping">
         </div>
-    </div>
+    </section>
 
     <section class="menu-container">
-        <div class="menu hidden">
+        <div class="menu hidden pause-menu">
             <h1>PAUSE</h1>
             <h2 class="menu-header">BACKGROUND MUSIC SELECTOR</h2>
-            <div class="bg-music-container">
+            <section class="bg-music-container">
                 <div class="bg-music bg-music-active" data-track="CAT_CHASE">[x] CAT CHASE</div>
                 <div class="bg-music" data-track="CRATE_CONGA">[ ] CRATE CONGA</div>
-            </div>
-            <div class="volume-container">
+            </section>
+            <section class="volume-container">
                 <h2 class="menu-header">SOUND LEVELS</h2>
                 <div class="volume-indicator">
                     <label for="pause-music-volume" class="menu-label">Music Volume:</label>
@@ -60,14 +60,14 @@
                     <input type="range" id="pause-sfx-volume" name="volume" class="volume" value="30" min="0" max="100">
                     <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
                 </div>
-            </div>
+            </section>
             <section class="menu-button-container">
                 <button class="menu-button resume-button">RESUME</button>
                 <button class="menu-button restart-button">RESTART</button>
             </section>
         </div>
 
-        <div class="menu game-over hidden">
+        <section class="menu game-over hidden">
             <h1>GAME OVER</h1>
             <img src="public/images/gameover.png" alt="asleep cat next to a knocked over box" class="game-over-image">
             <p class="game-over-final-score">Your score: <span class="final-score">0</span></p>
@@ -76,13 +76,13 @@
                 <button class="menu-button restart-button">RESTART</button>
                 <button class="menu-button main-menu-return-button">MAIN MENU</button>
             </section>
-        </div>
+        </section>
     </section>
 
     <section class="main-menu-container">
         <div class="main-menu">
             <h1>Whisker's Warehouse Leap</h1>
-            <aside class="main-menu-button-container">
+            <section class="main-menu-button-container">
                 <button class="menu-button main-menu-button play-button">
                     PLAY
                 </button>
@@ -92,11 +92,11 @@
                 <button class="menu-button main-menu-button htp-button">
                     HOW TO PLAY
                 </button>
-            </aside>
+            </section>
             <div class="main-menu-audio">
                 <i class="fa-solid fa-volume-high fa-3x" style="color: rgb(144, 158, 158);"></i>
             </div>
-            <img src="public/images/main_menu_background.jpg" alt="cat sitting on top of a stack of boxes inside a warehouse" class="background">
+            <img src="public/images/main_menu_background.jpg" alt="" class="background">
         </div>
     </section>
 
@@ -104,11 +104,11 @@
         <div class="menu">
             <h2>SETTINGS</h2>
             <h2 class="menu-header">BACKGROUND MUSIC SELECTOR</h2>
-            <div class="bg-music-container">
+            <section class="bg-music-container">
                 <div class="bg-music bg-music-active" data-track="CAT_CHASE">[x] CAT CHASE</div>
                 <div class="bg-music" data-track="CRATE_CONGA">[ ] CRATE CONGA</div>
-            </div>
-            <div class="volume-container">
+            </section>
+            <section class="volume-container">
                 <h2 class="menu-header">SOUND LEVELS</h2>
                 <div class="volume-indicator">
                     <label for="settings-music-volume" class="menu-label">Music Volume:</label>
@@ -128,7 +128,7 @@
                     <input type="range" id="settings-sfx-volume" name="volume" class="volume" value="30" min="0" max="100">
                     <i class="fa-solid fa-volume-high fa-lg" style="color: rgb(144, 158, 158);"></i>
                 </div>
-            </div>
+            </section>
             <button class="menu-button settings-menu-exit-button">
                 EXIT
             </button>

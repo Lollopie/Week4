@@ -1,6 +1,6 @@
 const audioLevels = {
-    backgroundMusicVolume: JSON.parse(localStorage.getItem('backgroundMusicVolume')) || 0.3,
-    sfxSoundVolume: JSON.parse(localStorage.getItem('sfxSoundVolume')) || 0.3,
+    backgroundMusicVolume: parseFloat(localStorage.getItem('backgroundMusicVolume')) || 0.3,
+    sfxSoundVolume: parseFloat(localStorage.getItem('sfxSoundVolume')) || 0.3,
 };
 
 let isMuted = false;
@@ -32,7 +32,7 @@ function applyVolumes() {
 
 function setMusicVolume(value) {
     audioLevels.backgroundMusicVolume = value;
-    localStorage.setItem('backgroundMusicVolume', JSON.stringify(value));
+    localStorage.setItem('backgroundMusicVolume', value);
     applyVolumes();
     document.dispatchEvent(
         new CustomEvent('musicVolumeChanged', {
@@ -44,7 +44,7 @@ function setMusicVolume(value) {
 function setSFXVolume(value) {
     audioLevels.sfxSoundVolume = value;
     applyVolumes();
-    localStorage.setItem('sfxSoundVolume', JSON.stringify(value));
+    localStorage.setItem('sfxSoundVolume', value);
     document.dispatchEvent(
         new CustomEvent('sfxVolumeChanged', {
             detail: { volume: value },

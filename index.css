@@ -3,6 +3,13 @@
     src: url("./public/fonts/PressStart2P-Regular.ttf") format("truetype");
 }
 
+:root {
+    --panel-border: #959DA0;
+    --panel-background: #2B3238;
+    --accent: #68816C;
+    --panel-text: #DBD7BE;
+}
+
 body {
     margin: 0;
     overflow: hidden;
@@ -108,8 +115,8 @@ body {
     width: 384px;
     max-height: 53vh;
 
-    background: #2B3238;
-    border: 5px double #959DA0;
+    background: var(--panel-background);
+    border: 5px double var(--panel-border);
     border-radius: 8px;
 
     display: flex;
@@ -119,12 +126,12 @@ body {
     align-items: center;
 
     font-family: 'PressStart2P', serif;
-    color: #DBD7BE;
+    color: var(--panel-text);
 
     overflow: auto;
 
     scrollbar-width: thin;
-    scrollbar-color: #68816C #2B3238;
+    scrollbar-color: var(--accent) var(--panel-background);
 }
 
 .menu::-webkit-scrollbar {
@@ -132,12 +139,12 @@ body {
 }
 
 .menu::-webkit-scrollbar-track {
-    background: #2B3238;
+    background: var(--panel-background);
 }
 
 .menu::-webkit-scrollbar-thumb {
-    background: #68816C;
-    border: 2px solid #959DA0;
+    background: var(--accent);
+    border: 2px solid var(--panel-border);
 }
 
 .menu::-webkit-scrollbar-thumb:hover {
@@ -210,7 +217,7 @@ body {
 
 .bg-music-container {
     width: 80%;
-    border: #959DA0 5px double;
+    border: var(--panel-border) 5px double;
     padding: 10px;
 
     display: flex;
@@ -260,18 +267,18 @@ body {
     font-size: 14px;
     line-height: 1.6;
     font-family: 'PressStart2P', serif;
-    color: #DBD7BE;
-    border: 5px ridge #959DA0;
+    color: var(--panel-text);
+    border: 5px ridge var(--panel-border);
     border-radius: 8px;
     cursor: pointer;
 }
 
 .menu-button:hover {
-    border: 5px groove #959DA0;
+    border: 5px groove var(--panel-border);
 }
 
 .resume-button {
-    background-color: #68816C;
+    background-color: var(--accent);
 }
 
 .restart-button {
@@ -279,7 +286,7 @@ body {
 }
 
 .main-menu-return-button {
-    background-color: #68816C;
+    background-color: var(--accent);
 }
 
 img {
@@ -387,7 +394,7 @@ img {
     left: 50px;
 
     background: rgb(43 50 56 / 0.5);
-    border: 5px double #959DA0;
+    border: 5px double var(--panel-border);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -396,13 +403,13 @@ img {
     align-items: center;
 
     font-family: 'PressStart2P', serif;
-    color: #DBD7BE;
+    color: var(--panel-text);
 
     overflow: auto;
 }
 
 .play-button {
-    background-color: #68816C;
+    background-color: var(--accent);
 }
 
 .main-menu-audio {
@@ -508,7 +515,7 @@ img {
     font-size: small;
     color: #000000;
     background-color: #D9D9D9;
-    border: 5px #68816C outset;
+    border: 5px var(--accent) outset;
 
     -webkit-user-select: none;
     user-select: none;

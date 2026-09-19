@@ -1,7 +1,7 @@
 const canvas = document.querySelector('.canvas');
 const mainMenuContainer = document.querySelector('.main-menu-container');
 const mainMenu = document.querySelector('.main-menu');
-const menu = document.querySelector('.menu');
+const pauseMenu = document.querySelector('.pause-menu');
 const playerWalking = canvas.querySelector('.player.walking');
 const playerJumping = canvas.querySelector('.player.jumping');
 const scoreField = canvas.querySelector('.score');
@@ -53,6 +53,10 @@ function removeJump() {
     }
 }
 
+function getCurrentScore() {
+    return parseInt(scoreField.textContent.split(': ')[1]);
+}
+
 function incrementScore() {
     scoreField.textContent = 'Score: ' + (getCurrentScore() + 1);
 }
@@ -68,10 +72,6 @@ function removeObstacle() {
     }
 }
 
-function getCurrentScore() {
-    return parseInt(scoreField.textContent.split(': ')[1]);
-}
-
 function getObstacleDurationMs() {
     const score = getCurrentScore();
     if (score < 15) {
@@ -82,6 +82,7 @@ function getObstacleDurationMs() {
 }
 
 function shouldGenerateNewObstacle(likelihood) {
+    //Increasing likelihood over time with eventual guaranteed spawn
     return Math.floor(Math.random() * Math.pow(2, likelihood)) === 0;
 }
 
@@ -186,7 +187,7 @@ function togglePause() {
     playerJumping.classList.toggle('paused');
     playerWalking.classList.toggle('paused');
     canvas.classList.toggle('muted');
-    menu.classList.toggle('hidden');
+    pauseMenu.classList.toggle('hidden');
 
     clearTimeout(tickTimer);
     tickTimer = null;
@@ -221,7 +222,7 @@ function resetGame() {
     scoreField.classList.remove('hidden');
     gameAudio.classList.remove('hidden');
     gameOverCard.classList.add('hidden');
-    menu.classList.add('hidden');
+    pauseMenu.classList.add('hidden');
     playerJumping.classList.remove('jump', 'paused');
     playerJumping.classList.add('hidden');
     playerWalking.classList.remove('hidden', 'paused');
@@ -240,7 +241,7 @@ function returnToMainMenu() {
     gameOver = false;
     isPaused = false;
     gameOverCard.classList.add('hidden');
-    menu.classList.add('hidden');
+    pauseMenu.classList.add('hidden');
     canvas.classList.remove('muted');
 
     mainMenuContainer.classList.remove('hidden');
@@ -261,7 +262,7 @@ playButton.addEventListener('click', () => {
 const resumeButton = document.querySelector('.resume-button');
 resumeButton.addEventListener('click', () => togglePause());
 
-const menuRestartButton = menu.querySelector('.restart-button');
+const menuRestartButton = pauseMenu.querySelector('.restart-button');
 menuRestartButton.addEventListener('click', () => resetGame());
 
 const gameOverRestartButton = gameOverCard.querySelector('.restart-button');
