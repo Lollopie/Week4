@@ -15,7 +15,6 @@ const gameOverHighScoreField = gameOverCard.querySelector('.game-over-high-score
 
 const jumpLengthInTicks = 60;
 const obstacleSpawnBaseLikelihood = 80;
-const minTicksToNextObstacle = 100;
 
 let inJump = false;
 let gameOver = false;
@@ -138,7 +137,7 @@ function checkCollision() {
 function handleGameOver() {
     gameOver = true;
     crashAudio.currentTime = 0;
-    crashAudio.play().catch(() => {});
+    crashAudio.play().catch(() => { });
     clearTimeout(tickTimer);
     tickTimer = null;
 
@@ -156,7 +155,7 @@ function handleGameOver() {
     }
     gameOverFinalScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
     gameOverHighScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
-    
+
     obstacles.forEach((obstacle) => obstacle.classList.add('paused'));
     playerJumping.classList.add('paused');
     playerWalking.classList.add('paused');
@@ -177,7 +176,12 @@ function performGameTick() {
             obstacleSpawnLikelihood -= 1;
         } else {
             obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
-            nextObstacleTick = tick + minTicksToNextObstacle * (basePxPerSecond / getObstaclePxPerSecond());
+            const minimumGap = 50;
+            const maximumGap = 200;
+            const randomGap = Math.floor(
+                Math.random() * (maximumGap - minimumGap + 1)
+            ) + minimumGap;
+            nextObstacleTick = tick + randomGap * (basePxPerSecond / getObstaclePxPerSecond());
         }
     }
     if (tick >= removeJumpTick) {
@@ -328,7 +332,7 @@ const sfxAudio = document.querySelector('.sfx');
 const crashAudio = document.querySelector('.sfx-crash');
 
 addEventListener('click', () => {
-    musicAudioElement.play().catch(() => {});
+    musicAudioElement.play().catch(() => { });
 }, { once: true });
 
 function performJump() {
@@ -338,7 +342,7 @@ function performJump() {
     playerWalking.classList.add('hidden');
     removeJumpTick = tick + jumpLengthInTicks;
     sfxAudio.currentTime = 0;
-    sfxAudio.play().catch(() => {});
+    sfxAudio.play().catch(() => { });
 }
 
 addEventListener('keydown', (e) => {
