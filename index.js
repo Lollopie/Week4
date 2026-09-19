@@ -32,7 +32,11 @@ let tick = 0;
 let tickTimer = null;
 let gameOverCardTimer = null;
 
-let highScoreValue = parseInt(localStorage.getItem('highScore')) || 0;
+let highScoreValue = 0;
+try {
+    highScoreValue = parseInt(localStorage.getItem('highScore')) || 0;
+} catch {
+}
 highScore.textContent = highScoreValue;
 
 const obstacleTypes = [
@@ -72,13 +76,21 @@ function removeObstacle() {
     }
 }
 
-function getObstacleDurationMs() {
+const basePxPerSecond = 1920 / 1.5;
+const maxPxPerSecond = 1920 / 0.7;
+
+function getObstaclePxPerSecond() {
     const score = getCurrentScore();
     if (score < 15) {
-        return 1500;
+        return basePxPerSecond;
     }
     const steps = Math.floor((score - 15) / 15) + 1;
-    return Math.max(700, 1500 - steps * 150);
+    return Math.min(maxPxPerSecond, basePxPerSecond + steps * 128);
+}
+
+function getObstacleDurationMs(obstacleWidth) {
+    const distancePx = window.innerWidth + obstacleWidth;
+    return (distancePx / getObstaclePxPerSecond()) * 1000;
 }
 
 function shouldGenerateNewObstacle(likelihood) {
@@ -92,7 +104,7 @@ function createObstacle(likelihood) {
         const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
         obstacle.setAttribute('src', `public/images/${obstacleType.image}`);
 
-        const durationMs = getObstacleDurationMs();
+        const durationMs = getObstacleDurationMs(obstacleType.width);
         obstacle.style.animationDuration = `${durationMs}ms`;
 
         obstacle.className = 'block' + (drawingHitboxes ? ' drawHitbox' : '');
@@ -137,7 +149,10 @@ function handleGameOver() {
     if (isNewRecord) {
         highScoreValue = score;
         highScore.textContent = score;
-        localStorage.setItem('highScore', score);
+        try {
+            localStorage.setItem('highScore', score);
+        } catch {
+        }
     }
     gameOverFinalScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
     gameOverHighScoreField.classList.toggle('rainbow_text_animated', isNewRecord);
@@ -162,7 +177,7 @@ function performGameTick() {
             obstacleSpawnLikelihood -= 1;
         } else {
             obstacleSpawnLikelihood = obstacleSpawnBaseLikelihood;
-            nextObstacleTick = tick + minTicksToNextObstacle * (getObstacleDurationMs() / 1500);
+            nextObstacleTick = tick + minTicksToNextObstacle * (basePxPerSecond / getObstaclePxPerSecond());
         }
     }
     if (tick >= removeJumpTick) {
